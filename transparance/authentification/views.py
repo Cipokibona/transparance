@@ -5,9 +5,6 @@ from django.contrib.auth import login, authenticate, logout
 
 # Create your views here.
 
-def home(request):
-
-    return render (request,'authentification/index.html')
 
 class LoginPageView(View):
     template_name = 'authentification/index.html'

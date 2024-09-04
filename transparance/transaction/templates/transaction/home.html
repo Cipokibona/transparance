@@ -42,7 +42,30 @@
 </head>
 
 <body>
-
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container">
         <div class="stat">
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -59,22 +82,7 @@
                     <div class="milestone-details">Ordered Coffee's</div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="milestone-counter">
-                    <i class="fa fa-trophy fa-3x"></i>
-                    <span class="stat-count highlight">140</span>
-                    <div class="milestone-details">Awards Win</div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="milestone-counter">
-                    <i class="fa fa-camera fa-3x"></i>
-                    <span class="stat-count highlight">500</span>
-                    <div class="milestone-details">Photos Taken</div>
-                </div>
-            </div>
         </div>
-        <!-- stat -->
     </div>
     <a href="{% url 'login' %}">Logout</a>
     <script>
