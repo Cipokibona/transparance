@@ -1,2 +1,105 @@
-hello
-<a href="{% url 'login' %}">retour</a>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        .milestone-counter {
+            float: left;
+            margin: 25px;
+            text-align: center;
+        }
+        
+        .stat {
+            margin: 10px auto;
+        }
+        
+        .highlight {
+            color: #111;
+            padding: 20px 0;
+            font-weight: bold;
+            display: block;
+            overflow: hidden;
+            margin-bottom: 0;
+            font-size: 48px;
+        }
+        
+        .stat i {
+            color: #3498db;
+        }
+        
+        .milestone-details {
+            font-weight: bold;
+            font-size: 18px;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="stat">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="milestone-counter">
+                    <i class="fa fa-user fa-3x"></i>
+                    <span class="stat-count highlight">122000000</span>
+                    <div class="milestone-details">Happy Customers</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="milestone-counter">
+                    <i class="fa fa-coffee fa-3x"></i>
+                    <span class="stat-count highlight">100</span>
+                    <div class="milestone-details">Ordered Coffee's</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="milestone-counter">
+                    <i class="fa fa-trophy fa-3x"></i>
+                    <span class="stat-count highlight">140</span>
+                    <div class="milestone-details">Awards Win</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="milestone-counter">
+                    <i class="fa fa-camera fa-3x"></i>
+                    <span class="stat-count highlight">500</span>
+                    <div class="milestone-details">Photos Taken</div>
+                </div>
+            </div>
+        </div>
+        <!-- stat -->
+    </div>
+    <a href="{% url 'login' %}">Logout</a>
+    <script>
+        (function($) {
+            "use strict";
+
+            function count($this) {
+                var current = parseInt($this.html(), 10);
+                current = current + 1000000; /* Where 50 is increment */
+                $this.html(++current);
+                if (current > $this.data('count')) {
+                    $this.html($this.data('count'));
+                } else {
+                    setTimeout(function() {
+                        count($this)
+                    }, 5);
+                }
+            }
+            $(".stat-count").each(function() {
+                $(this).data('count', parseInt($(this).html(), 10));
+                $(this).html('0');
+                count($(this));
+            });
+        })(jQuery);
+    </script>
+</body>
+
+</html>
