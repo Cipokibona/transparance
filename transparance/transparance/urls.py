@@ -21,5 +21,7 @@ from transaction import views as trans
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', auth.home, name='login'),
+    path('', auth.LoginPageView.as_view(), name='login'),
+    path('home/', trans.home, name='home'),
+    path('logout/', auth.logout_user, name='logout'),
 ]
