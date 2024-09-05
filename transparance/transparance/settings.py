@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'authentification',
-    'transparance',
+    'transaction',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'transparance.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'transparance',
+        'NAME': 'transparance_financier',
         'USER': 'postgres',
         'PASSWORD': 'cipo',
         'HOST': '127.0.0.1',
@@ -130,3 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # fotoblog/settings.py
 AUTH_USER_MODEL = 'authentification.User'
+
+# fotoblog/settings.py
+
+LOGIN_URL = 'login'
