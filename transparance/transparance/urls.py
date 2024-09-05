@@ -24,4 +24,5 @@ urlpatterns = [
     path('', auth.LoginPageView.as_view(), name='login'),
     path('home/', trans.home, name='home'),
     path('logout/', auth.logout_user, name='logout'),
+    path('travail/', trans.travail, name='travail'),
 ]
