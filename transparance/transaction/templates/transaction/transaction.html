@@ -55,37 +55,23 @@
                                 {% csrf_token %}
                                 <div class="shadow-sm p-3 mb-5 rounded">
                                     <div class="mb-3">
-                                        <label for="first_name" class="form-label">First name</label>
-                                        <input type="text" class="form-control" name="first_name" value="{{user.first_name}}">
+                                        <label for="compte_mere" class="form-label">Compte-mere</label>
+                                        <select class="form-control" name="compte_mere">
+                                            <option value="ab">ab</option>
+                                            <option value="ab">ab</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="last_name" class="form-label">Last name</label>
-                                        <input type="text" class="form-control" name="last_name" value="{{user.last_name}}">
+                                        <label for="compte_heritier" class="form-label">Compte-heritier</label>
+                                        <select class="form-control" name="compte_heritier">
+                                            <option value="ab">ab</option>
+                                            <option value="ab">ab</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">email</label>
-                                        <input type="email" class="form-control" name="email" value="{{user.email}}">
+                                        <label for="montant" class="form-label">Montant</label>
+                                        <input type="number" class="form-control" name="number" value=0>
                                     </div>
-                                    <!-- <div class="mb-3">
-                                        <label for="tel" class="form-label">Tel</label>
-                                        <input type="number" class="form-control" name="tel" value="{{user.tel}}">
-                                    </div> -->
-                                    <div class="mb-3">
-                                        <label for="post" class="form-label">Fonction</label>
-                                        <input type="text" class="form-control" name="post" value="{{user.post}}">
-                                    </div>
-                                    <!-- <div class="mb-3">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control" name="username" value="{{user.username}}">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">password</label>
-                                        <input type="password" class="form-control" name="password">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="valid_password" class="form-label">Valid password</label>
-                                        <input type="password" class="form-control" name="valid_password">
-                                    </div> -->
                                     <div class="d-grid gap-2 mx-auto">
                                         {% if msg_error %}
                                         <label for="remember-me" class="text-info">
