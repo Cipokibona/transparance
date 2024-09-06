@@ -54,3 +54,44 @@ class ProfilPageView(View):
             user.save()
             
         return render(request, self.template_name, context={'user':user, 'msg_error':msg_error})
+
+
+class NewUserPageView(View):
+    template_name = 'transaction/newuser.html'
+
+    def get(self, request):
+        
+        return render (request, self.template_name)
+
+    def post(self, request):
+        msg_error = False
+        if request.method == 'POST':
+            first_name = request.POST.get("first_name")
+            last_name = request.POST.get("last_name")
+            email = request.POST.get("email")
+            # tel = request.POST.get("tel")
+            post = request.POST.get("post")
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+            # valid_password = request.POST.get("valid_password")
+                
+                # enregistrement du nouvel utilisateur
+
+            if username and password:
+                # enregistrement de user
+                user = User.objects.create_user(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email = email,
+                        post = post,
+                        username=username,
+                        password=password,
+                        is_staff = True,
+                    )
+                user.save()
+                msg_succes = True
+                return render (request, 'transaction/home.html', {'msg_error':msg_error, 'msg_succes':msg_succes})
+            else:
+                msg_error = True
+            
+        return render(request, self.template_name, context={'user':user, 'msg_error':msg_error})
