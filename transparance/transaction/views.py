@@ -2,12 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from authentification.models import User
+from transaction.models import Compte
+from django.db.models import Sum
 
 
 @login_required
 def home (request):
 
-    return render (request,'transaction/home.html')
+    comptes = Compte.objects.filter(is_active=True)
+    sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+    total = sum_comptes['total']
+
+    return render (request,'transaction/home.html', {'comptes':comptes,'total':total})
 
 
 @login_required

@@ -42,6 +42,7 @@
             </div>
         </nav>
         <div class="row">
+            <h3 class="text-center pt-5">Comptes</h3>
             <div class="col">
                 {% if msg_succes %}
                 <label for="remember-me" class="text-info">
@@ -50,28 +51,23 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Compte</th>
+                            <th scope="col">Montant</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for compte in comptes %}
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ compte.name}}</td>
+                            <td>{{ compte.montant}} BIF</td>
                         </tr>
+                        {% endfor %}
                         <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
+                            <th scope="row" colspan="2">Total</th>
+                            <td>
+                                <strong>{{ total }} BIF</strong>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
