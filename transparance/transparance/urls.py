@@ -25,4 +25,5 @@ urlpatterns = [
     path('home/', trans.home, name='home'),
     path('logout/', auth.logout_user, name='logout'),
     path('travail/', trans.travail, name='travail'),
+    path('profil/', trans.ProfilPageView.as_view(), name='profil'),
 ]
