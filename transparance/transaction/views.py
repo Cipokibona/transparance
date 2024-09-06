@@ -118,7 +118,12 @@ class TransactionPageView(View):
         if request.method == 'POST':
             emetteur = request.POST.get("compte_emetteur")
             recepteur = request.POST.get("compte_recepteur")
-            montant = int(request.POST.get("montant"))
+            montant_saisi = request.POST.get("montant")
+            if montant_saisi == '':
+                msg_error = True
+                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
+            else:
+                montant = int(montant_saisi)
 
             # vérification de la valeur recuperer
             if emetteur == '' or recepteur == '':
