@@ -55,22 +55,30 @@
                                 {% csrf_token %}
                                 <div class="shadow-sm p-3 mb-5 rounded">
                                     <div class="mb-3">
-                                        <label for="compte_mere" class="form-label">Compte-mere</label>
-                                        <select class="form-control" name="compte_mere">
-                                            <option value="ab">ab</option>
-                                            <option value="ab">ab</option>
+                                        <label for="compte_emetteur" class="form-label">Compte émetteur</label>
+                                        <select class="form-control" name="compte_emetteur">
+                                            <option value="" selected>Choisissez un compte source</option>
+                                            {% for compte in comptes %}
+                                            <option value="{{ compte.id }}">
+                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant }} BIF)
+                                            </option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="compte_heritier" class="form-label">Compte-heritier</label>
-                                        <select class="form-control" name="compte_heritier">
-                                            <option value="ab">ab</option>
-                                            <option value="ab">ab</option>
+                                        <label for="compte_recepteur" class="form-label">Compte récepteur</label>
+                                        <select class="form-control" name="compte_recepteur">
+                                            <option value="" selected>Choisissez un compte cible</option>
+                                            {% for compte in comptes %}
+                                            <option value="{{ compte.id }}">
+                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant }} BIF)
+                                            </option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="montant" class="form-label">Montant</label>
-                                        <input type="number" class="form-control" name="number" value=0>
+                                        <input type="number" class="form-control" name="montant" value=0>
                                     </div>
                                     <div class="d-grid gap-2 mx-auto">
                                         {% if msg_error %}

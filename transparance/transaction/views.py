@@ -107,9 +107,37 @@ class TransactionPageView(View):
     template_name = 'transaction/transaction.html'
 
     def get(self, request):
-            
-        return render (request, self.template_name)
+        
+        comptes = Compte.objects.filter(is_active=True)
+
+        return render (request, self.template_name, {'comptes':comptes})
 
     def post(self, request):
+        comptes = Compte.objects.filter(is_active=True)
+        msg_error = False
+        if request.method == 'POST':
+            emetteur = request.POST.get("compte_emetteur")
+            recepteur = request.POST.get("compte_recepteur")
+            montant = int(request.POST.get("montant"))
+
+            # vérification de la valeur recuperer
+            if emetteur == '' or recepteur == '':
+                msg_error = True
+                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
+            else:
+                compte_emetteur = Compte.objects.get(id=emetteur)
+                compte_recepteur = Compte.objects.get(id=recepteur)
+
+                # verification du montant a retirer
+                if compte_emetteur.montant < montant:
+                    msg_error = True
+                    return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
+                else:
+                    # tranferer
+                    compte_emetteur.montant = compte_emetteur.montant - montant
+                    compte_recepteur.montant = compte_recepteur.montant + montant
+                    # enregistrement des nouveaux données
+                    compte_recepteur.save()
+                    compte_emetteur.save()
                 
-        return render(request, self.template_name)
+        return render(request, self.template_name,{'comptes':comptes})
