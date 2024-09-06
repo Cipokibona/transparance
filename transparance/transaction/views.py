@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from authentification.models import User
-from transaction.models import Compte
+from transaction.models import Compte, CompteEnCompte
 from django.db.models import Sum
 
 
@@ -139,5 +139,13 @@ class TransactionPageView(View):
                     # enregistrement des nouveaux données
                     compte_recepteur.save()
                     compte_emetteur.save()
+                    # table compte en compte
+                    transfer = CompteEnCompte(
+                        compte_emetteur=compte_emetteur,
+                        compte_recepteur=compte_recepteur,
+                        author=request.user,
+                        montant=montant,
+                    )
+                    transfer.save()
                 
         return render(request, self.template_name,{'comptes':comptes})
