@@ -30,5 +30,27 @@ class ProfilPageView(View):
 
     def post(self, request):
         msg_error = False
-        
-        return render(request, self.template_name, context={'msg_error': msg_error})
+        if request.method == 'POST':
+            first_name = request.POST.get("first_name")
+            last_name = request.POST.get("last_name")
+            email = request.POST.get("email")
+            # tel = request.POST.get("tel")
+            post = request.POST.get("post")
+            # username = request.POST.get("username")
+            # password = request.POST.get("password")
+            # valid_password = request.POST.get("valid_password")
+                
+                # enregistrement des nouveaux données du profil
+
+            user = User.objects.get(id=request.user.id)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            # user.tel = tel
+            user.post = post
+            user.is_staff = True
+            # user.username = username
+            # user.password = password
+            user.save()
+            
+        return render(request, self.template_name, context={'user':user, 'msg_error':msg_error})

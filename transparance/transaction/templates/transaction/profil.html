@@ -42,6 +42,7 @@
             </div>
         </nav>
         <div id="login">
+            <a href="{% url 'home' %}" style="color: #47d0c5;">+ New user</a>
             <h3 class="text-center pt-5">Profil {{user.username}}</h3>
             <div class="container">
                 <div id="login-row" class="row justify-content-center align-items-center">
@@ -63,21 +64,25 @@
                                         <input type="email" class="form-control" name="email" value="{{user.email}}">
                                     </div>
                                     <div class="mb-3">
+                                        <label for="tel" class="form-label">Tel</label>
+                                        <input type="number" class="form-control" name="tel" value="{{user.tel}}">
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="post" class="form-label">Fonction</label>
                                         <input type="text" class="form-control" name="post" value="{{user.post}}">
                                     </div>
-                                    <div class="mb-3">
+                                    <!-- <div class="mb-3">
                                         <label for="username" class="form-label">Username</label>
                                         <input type="text" class="form-control" name="username" value="{{user.username}}">
                                     </div>
                                     <div class="mb-3">
                                         <label for="password" class="form-label">password</label>
-                                        <input type="password" class="form-control" name="password" value="">
+                                        <input type="password" class="form-control" name="password">
                                     </div>
                                     <div class="mb-3">
                                         <label for="valid_password" class="form-label">Valid password</label>
-                                        <input type="password" class="form-control" name="valid_password" value="">
-                                    </div>
+                                        <input type="password" class="form-control" name="valid_password">
+                                    </div> -->
                                     <div class="d-grid gap-2 mx-auto">
                                         {% if msg_error %}
                                         <label for="remember-me" class="text-info">
