@@ -101,3 +101,15 @@ class NewUserPageView(View):
                 msg_error = True
             
         return render(request, self.template_name, context={'user':user, 'msg_error':msg_error})
+    
+
+class TransactionPageView(View):
+    template_name = 'transaction/transaction.html'
+
+    def get(self, request):
+            
+        return render (request, self.template_name)
+
+    def post(self, request):
+                
+        return render(request, self.template_name)

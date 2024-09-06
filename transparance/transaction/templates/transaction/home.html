@@ -26,10 +26,13 @@
                             <a class="nav-link disabled" aria-current="page" href="#">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Transaction</a>
+                            <a class="nav-link" href="{% url 'transaction' %}">Transactions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'travail' %}">Travail</a>
+                            <a class="nav-link" href="#">Dépenses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'travail' %}">Travaux</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profil' %}">Profil</a>
@@ -59,13 +62,13 @@
                         {% for compte in comptes %}
                         <tr>
                             <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ compte.name}}</td>
-                            <td>{{ compte.montant}} BIF</td>
+                            <td title="{{ compte.description }}">{{ compte.name}}</td>
+                            <td title="Montat de {{ compte.name }}">{{ compte.montant}} BIF</td>
                         </tr>
                         {% endfor %}
                         <tr>
                             <th scope="row" colspan="2">Total</th>
-                            <td>
+                            <td title="Total">
                                 <strong>{{ total }} BIF</strong>
                             </td>
                         </tr>

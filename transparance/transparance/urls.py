@@ -27,4 +27,5 @@ urlpatterns = [
     path('travail/', trans.travail, name='travail'),
     path('profil/', trans.ProfilPageView.as_view(), name='profil'),
     path('new_user/', trans.NewUserPageView.as_view(), name='new_user'),
+    path('transaction/', trans.TransactionPageView.as_view(), name='transaction'),
 ]
