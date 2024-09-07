@@ -15,6 +15,20 @@ class CompteEnCompte(models.Model):
 
     compte_emetteur = models.ForeignKey(Compte, related_name='transferts_emis', on_delete=models.CASCADE)
     compte_recepteur = models.ForeignKey(Compte, related_name='transferts_recus', on_delete=models.CASCADE)
-    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    montant = models.IntegerField(null=True, blank=True)
+    date = models.DateTimeField(default=timezone.now)
+
+class Depense(models.Model):
+
+    titre = models.fields.CharField(max_length=100)
+    description = models.fields.CharField(max_length=100)
+    fixe = models.BooleanField(default=False)
+
+class Retrait(models.Model):
+
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    compte = models.ForeignKey(Compte, null=True, on_delete=models.CASCADE)
+    depense = models.ForeignKey(Depense, null=True, on_delete=models.CASCADE)
     montant = models.IntegerField(null=True, blank=True)
     date = models.DateTimeField(default=timezone.now)
