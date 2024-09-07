@@ -45,7 +45,7 @@
             </div>
         </nav>
         <div id="login">
-            <h3 class="text-center pt-5">Rétrait</h3>
+            <h3 class="text-center pt-5">Rétrait (Max: {{ total }} BIF)</h3>
             <div class="container">
                 <div id="login-row" class="row justify-content-center align-items-center">
                     <div id="login-column" class="col-md-6">
@@ -62,8 +62,15 @@
                                         <input type="text" class="form-control" name="description" placeholder="Description du compte">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="compte_name" class="form-label">Compte</label>
-                                        <input type="number" class="form-control" name="compte_name">
+                                        <label for="compte" class="form-label">Compte</label>
+                                        <select class="form-control" name="compte">
+                                            <option value="" selected>Choisissez un compte source</option>
+                                            {% for compte in comptes %}
+                                            <option value="{{ compte.id }}">
+                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant }} BIF)
+                                            </option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="montant" class="form-label">Montant</label>

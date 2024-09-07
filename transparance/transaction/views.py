@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from authentification.models import User
-from transaction.models import Compte, CompteEnCompte
+from transaction.models import Compte, CompteEnCompte, Depense, Retrait
 from django.db.models import Sum
 
 
@@ -207,8 +207,52 @@ class NewRetraitView(View):
 
     def get(self, request):
 
-        return render (request, self.template_name)
+        comptes = Compte.objects.filter(is_active=True)
+        sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+        total = sum_comptes['total']
+        
+        return render (request, self.template_name, {'comptes':comptes, 'total':total})
     
     def post(self, request):
+        msg_error = False
+        comptes = Compte.objects.filter(is_active=True)
+        sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+        total = sum_comptes['total']
+        if request.method == 'POST':
+            titre = request.POST.get("titre")
+            description = request.POST.get("description")
+            montant = request.POST.get("montant")
+            compte_id = request.POST.get("compte")
+            # si le montant n'est pas saisi initialiser a zero
+            if montant == '' or compte_id == '' or titre == '':
+                msg_error = True
+                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes, 'total':total})
+            else:
+                montant = int(montant)
+                compte_id = int(compte_id)
+                compte = Compte.objects.get(id=compte_id)
+                # annulation du retrait si le montant est supérieur du montant du compte
+                if montant > compte.montant:
+                    msg_error = True
+                    return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes, 'total':total})
+                # creation du model Depense
+                depense = Depense(
+                    titre = titre,
+                    description = description,
+                )
+                depense.save()
+                # creation du model Retrait
+                retrait = Retrait(
+                    author = request.user,
+                    compte = compte,
+                    depense = depense,
+                    montant = montant,
+                )
+                retrait.save()
+                # mis a jour du montant sur le compte selectionner
+                compte.montant = compte.montant - montant
+                compte.save()
+                msg_succes = True
+            return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total})
 
         return render (request, self.template_name)
