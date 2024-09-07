@@ -138,12 +138,16 @@ class TransactionPageView(View):
                     msg_error = True
                     return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
                 else:
+                    # annulation du transfert si le compte emetteur et le meme que le compte recepteur
+                    if compte_emetteur == compte_recepteur:
+                        msg_error = True
+                        return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
                     # tranferer
                     compte_emetteur.montant = compte_emetteur.montant - montant
                     compte_recepteur.montant = compte_recepteur.montant + montant
-                    # enregistrement des nouveaux données
-                    compte_recepteur.save()
+                    # save data
                     compte_emetteur.save()
+                    compte_recepteur.save()
                     # table compte en compte
                     transfer = CompteEnCompte(
                         compte_emetteur=compte_emetteur,
