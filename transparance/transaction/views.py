@@ -96,7 +96,10 @@ class NewUserPageView(View):
                     )
                 user.save()
                 msg_succes = True
-                return render (request, 'transaction/home.html', {'msg_error':msg_error, 'msg_succes':msg_succes})
+                comptes = Compte.objects.filter(is_active=True)
+                sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+                total = sum_comptes['total']
+                return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total})
             else:
                 msg_error = True
             
@@ -158,3 +161,54 @@ class TransactionPageView(View):
                     transfer.save()
                 
         return render(request, self.template_name,{'comptes':comptes})
+    
+
+class NewComptePageView(View):
+
+    template_name = 'transaction/newcompte.html'
+
+    def get(self, request):
+
+        return render (request, self.template_name)
+    
+    def post(self, request):
+        msg_error = False
+        if request.method == 'POST':
+            compte_name = request.POST.get("name")
+            description = request.POST.get("description")
+            montant = request.POST.get("montant")
+            # si le montant n'est pas saisi initialiser a zero
+            if montant == '':
+                montant = 0
+            elif compte_name == '':
+                msg_error = True
+                return render(request, self.template_name, {'msg_error':msg_error})
+            else:
+                montant = int(montant)
+            new_compte = Compte(
+                name = compte_name,
+                description = description,
+                montant = montant,
+
+            )
+            new_compte.save()
+            msg_succes = True
+            comptes = Compte.objects.filter(is_active=True)
+            sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+            total = sum_comptes['total']
+            return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total})
+
+        return render (request, self.template_name, {'msg_error':msg_error})
+    
+
+class NewRetraitView(View):
+
+    template_name = 'transaction/depense.html'
+
+    def get(self, request):
+
+        return render (request, self.template_name)
+    
+    def post(self, request):
+
+        return render (request, self.template_name)

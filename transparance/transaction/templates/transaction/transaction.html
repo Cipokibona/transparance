@@ -29,7 +29,7 @@
                             <a class="nav-link disabled" href="#">Transactions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Dépenses</a>
+                            <a class="nav-link" href="{% url 'depense' %}">Dépenses</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'travail' %}">Travaux</a>
@@ -45,8 +45,8 @@
             </div>
         </nav>
         <div id="login">
-            <a href="{% url 'new_user' %}" style="color: #47d0c5;">+ New Compte</a>
-            <h3 class="text-center pt-5">Opération Compte en Compte</h3>
+            <a href="{% url 'new_compte' %}" style="color: #47d0c5;">+ New Compte</a>
+            <h3 class="text-center pt-5">Transfert Compte en Compte</h3>
             <div class="container">
                 <div id="login-row" class="row justify-content-center align-items-center">
                     <div id="login-column" class="col-md-6">

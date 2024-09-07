@@ -28,4 +28,6 @@ urlpatterns = [
     path('profil/', trans.ProfilPageView.as_view(), name='profil'),
     path('new_user/', trans.NewUserPageView.as_view(), name='new_user'),
     path('transaction/', trans.TransactionPageView.as_view(), name='transaction'),
+    path('new_compte/', trans.NewComptePageView.as_view(), name='new_compte'),
+    path('depense/', trans.NewRetraitView.as_view(), name='depense'),
 ]
