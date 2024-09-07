@@ -40,8 +40,9 @@ class Travail(models.Model):
     proprio = models.fields.CharField(max_length=100)
     adresse = models.fields.CharField(max_length=100)
     valeur = models.IntegerField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     date_debut = models.DateTimeField(default=timezone.now)
-    date_fin = models.DateTimeField()
+    date_fin = models.DateTimeField(null=True)
 
 class MontantPayeTravail(models.Model):
 

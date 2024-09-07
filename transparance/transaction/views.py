@@ -256,3 +256,59 @@ class NewRetraitView(View):
             return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total})
 
         return render (request, self.template_name)
+    
+
+class TravailPagerView(View):
+    template_name = 'transaction/travail.html'
+
+    def get(self, request):
+        comptes = Compte.objects.filter(is_active=True)
+        
+        return render (request, self.template_name, {'comptes':comptes})
+    
+    def post(self, request):
+        msg_error = False
+        comptes = Compte.objects.filter(is_active=True)
+        if request.method == 'POST':
+            titre = request.POST.get("titre")
+            proprio = request.POST.get("proprio")
+            adresse = request.POST.get("adresse")
+            valeur = request.POST.get("valeur")
+            montant = request.POST.get("montant")
+            compte_id = request.POST.get("compte")
+            # si le montant n'est pas saisi initialiser a zero
+            if montant == '' or compte_id == '' or titre == '' or valeur == '':
+                msg_error = True
+                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
+            else:
+                montant = int(montant)
+                compte_id = int(compte_id)
+                valeur = int(valeur)
+                compte = Compte.objects.get(id=compte_id)
+                # annulation du depot si le montant est inferieur a zero
+                if montant < 0:
+                    msg_error = True
+                    return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
+                # creation du model Travail
+                travail = Travail(
+                    titre = titre,
+                    proprio = proprio,
+                    adresse = adresse,
+                    valeur = valeur,
+                )
+                travail.save()
+                # creation du model Retrait
+                montant_paye = MontantPayeTravail(
+                    author = request.user,
+                    compte = compte,
+                    travail = travail,
+                    montant = montant,
+                )
+                montant_paye.save()
+                # mis a jour du montant sur le compte selectionner
+                compte.montant = compte.montant + montant
+                compte.save()
+                msg_succes = True
+            return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes})
+
+        return render (request, self.template_name)
