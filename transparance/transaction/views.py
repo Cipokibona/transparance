@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from authentification.models import User
-from transaction.models import Compte, CompteEnCompte, Depense, Retrait
+from transaction.models import Compte, CompteEnCompte, Depense, Retrait, Travail, MontantPayeTravail, DepenseTravail
 from django.db.models import Sum
 
 

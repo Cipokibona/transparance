@@ -32,3 +32,29 @@ class Retrait(models.Model):
     depense = models.ForeignKey(Depense, null=True, on_delete=models.CASCADE)
     montant = models.IntegerField(null=True, blank=True)
     date = models.DateTimeField(default=timezone.now)
+
+
+class Travail(models.Model):
+
+    titre = models.fields.CharField(max_length=100)
+    proprio = models.fields.CharField(max_length=100)
+    adresse = models.fields.CharField(max_length=100)
+    valeur = models.IntegerField(null=True, blank=True)
+    date_debut = models.DateTimeField(default=timezone.now)
+    date_fin = models.DateTimeField()
+
+class MontantPayeTravail(models.Model):
+
+    travail = models.ForeignKey(Travail, null=True, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    compte = models.ForeignKey(Compte, null=True, on_delete=models.CASCADE)
+    montant = models.IntegerField(null=True, blank=True)
+    date = models.DateTimeField(default=timezone.now)
+
+class DepenseTravail(models.Model):
+
+    travail = models.ForeignKey(Travail, null=True, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    compte = models.ForeignKey(Compte, null=True, on_delete=models.CASCADE)
+    montant = models.IntegerField(null=True, blank=True)
+    date = models.DateTimeField(default=timezone.now)
