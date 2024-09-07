@@ -263,12 +263,14 @@ class TravailPagerView(View):
 
     def get(self, request):
         comptes = Compte.objects.filter(is_active=True)
+        travaux = Travail.objects.filter(is_active=True)
         
-        return render (request, self.template_name, {'comptes':comptes})
+        return render (request, self.template_name, {'comptes':comptes,'travaux':travaux})
     
     def post(self, request):
         msg_error = False
         comptes = Compte.objects.filter(is_active=True)
+        travaux = Travail.objects.filter(is_active=True)
         if request.method == 'POST':
             titre = request.POST.get("titre")
             proprio = request.POST.get("proprio")
@@ -279,7 +281,7 @@ class TravailPagerView(View):
             # si le montant n'est pas saisi initialiser a zero
             if montant == '' or compte_id == '' or titre == '' or valeur == '':
                 msg_error = True
-                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
+                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes,'travaux':travaux})
             else:
                 montant = int(montant)
                 compte_id = int(compte_id)
@@ -288,7 +290,7 @@ class TravailPagerView(View):
                 # annulation du depot si le montant est inferieur a zero
                 if montant < 0:
                     msg_error = True
-                    return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
+                    return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes,'travaux':travaux})
                 # creation du model Travail
                 travail = Travail(
                     titre = titre,
