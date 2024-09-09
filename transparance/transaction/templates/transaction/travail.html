@@ -132,13 +132,13 @@
                                         <td title="Adresse">{{ travail.adresse }}</td>
                                         <td title="Montant Payé">
                                             {{ travail.montant_paye }} BIF
-                                            <a href="{% url 'home' %}" style="color: #47d0c5; text-decoration: none;" title="Ajouter">
+                                            <a href="/avance_travail/{{travail.id}}/" style="color: #47d0c5; text-decoration: none;" title="Ajouter">
                                                 +
                                             </a>
                                         </td>
                                         <td title="Dépenses">
                                             {{ travail.depenses|default:'0' }} BIF
-                                            <a href="{% url 'home' %}" style="color: #47d0c5; text-decoration: none;" title="Ajouter">
+                                            <a href="" style="color: #47d0c5; text-decoration: none;" title="Ajouter">
                                                 +
                                             </a>
                                         </td>
@@ -164,26 +164,26 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Début</th>
+                                        <th scope="col">Fin</th>
                                         <th scope="col">Titre</th>
                                         <th scope="col">Propriétaire</th>
                                         <th scope="col">Adresse</th>
                                         <th scope="col">Gain</th>
                                         <th scope="col">Valeur</th>
-                                        <th scope="col">Fin</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for travail_fini in travaux_finis %}
                                     <tr>
-                                        <td title="Date du début">{{ travail_fini.date_debut}}</td>
-                                        <td title="Titre">{{ forloop.counter }}. {{ travail.titre}}</td>
+                                        <td title="Date début">{{ travail_fini.date_debut}}</td>
+                                        <td title="Date fin">{{ travail_fini.date_fin }}</td>
+                                        <td title="Titre">{{ forloop.counter }}. {{ travail_fini.titre}}</td>
                                         <td title="Propriétaire">{{ travail_fini.proprio }}</td>
                                         <td title="Adresse">{{ travail_fini.adresse }}</td>
                                         <td title="Gain">
                                             {{ travail_fini.montant_net }} BIF
                                         </td>
                                         <td title="Valeur">{{ travail_fini.valeur }} BIF</td>
-                                        <td title="Délai">{{ travail_fini.date_fin }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -196,7 +196,7 @@
     </div>
 </body>
 
-</html>iv>
+</html>
 </body>
 
 </html>
