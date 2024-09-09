@@ -263,14 +263,33 @@ class TravailPagerView(View):
 
     def get(self, request):
         comptes = Compte.objects.filter(is_active=True)
-        travaux = Travail.objects.filter(is_active=True)
+        travaux = Travail.objects.filter(is_active=True).annotate(
+            montant_paye = Sum('montantpayetravail__montant'),
+            depenses = Sum('depensetravail__montant')
+        )
+        travaux_finis = Travail.objects.filter(is_active=False).annotate(
+            montant_paye = Sum('montantpayetravail__montant'),
+            depenses = Sum('depensetravail__montant')
+        )
+        for travail in travaux_finis:
+            travail.montant_net = travail.montant_paye - (travail.depenses or 0)
         
-        return render (request, self.template_name, {'comptes':comptes,'travaux':travaux})
+        return render (request, self.template_name, {'comptes':comptes,'travaux':travaux, 'travaux_finis':travaux_finis})
     
     def post(self, request):
         msg_error = False
         comptes = Compte.objects.filter(is_active=True)
-        travaux = Travail.objects.filter(is_active=True)
+        travaux = Travail.objects.filter(is_active=True).annotate(
+            montant_paye = Sum('montantpayetravail__montant'),
+            depenses = Sum('depensetravail__montant')
+        )
+        travaux_finis = Travail.objects.filter(is_active=False).annotate(
+            montant_paye = Sum('montantpayetravail__montant'),
+            depenses = Sum('depensetravail__montant')
+        )
+        for travail in travaux_finis:
+            travail.montant_net = travail.montant_paye - (travail.depenses or 0)
+
         if request.method == 'POST':
             titre = request.POST.get("titre")
             proprio = request.POST.get("proprio")
@@ -281,7 +300,7 @@ class TravailPagerView(View):
             # si le montant n'est pas saisi initialiser a zero
             if montant == '' or compte_id == '' or titre == '' or valeur == '':
                 msg_error = True
-                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes,'travaux':travaux})
+                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes,'travaux':travaux, 'travaux_finis':travaux_finis})
             else:
                 montant = int(montant)
                 compte_id = int(compte_id)
@@ -290,7 +309,7 @@ class TravailPagerView(View):
                 # annulation du depot si le montant est inferieur a zero
                 if montant < 0:
                     msg_error = True
-                    return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes,'travaux':travaux})
+                    return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes,'travaux':travaux, 'travaux_finis':travaux_finis})
                 # creation du model Travail
                 travail = Travail(
                     titre = titre,
@@ -299,7 +318,7 @@ class TravailPagerView(View):
                     valeur = valeur,
                 )
                 travail.save()
-                # creation du model Retrait
+                # creation du model MontantPayeTravail
                 montant_paye = MontantPayeTravail(
                     author = request.user,
                     compte = compte,
