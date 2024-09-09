@@ -31,4 +31,5 @@ urlpatterns = [
     path('new_compte/', trans.NewComptePageView.as_view(), name='new_compte'),
     path('depense/', trans.NewRetraitView.as_view(), name='depense'),
     path('avance_travail/<int:id>/', trans.AvanceTravailPageView.as_view(), name='avance_travail'),
+    path('depense_travail/<int:id>/', trans.DepenseTravailPageView.as_view(), name='depense_travail'),
 ]

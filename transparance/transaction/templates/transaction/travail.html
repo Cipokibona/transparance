@@ -131,18 +131,18 @@
                                         <td title="Propriétaire">{{ travail.proprio }}</td>
                                         <td title="Adresse">{{ travail.adresse }}</td>
                                         <td title="Montant Payé">
-                                            {{ travail.montant_paye }} BIF
+                                            {{ travail.total_avance }} BIF
                                             <a href="/avance_travail/{{travail.id}}/" style="color: #47d0c5; text-decoration: none;" title="Ajouter">
                                                 +
                                             </a>
                                         </td>
                                         <td title="Dépenses">
-                                            {{ travail.depenses|default:'0' }} BIF
-                                            <a href="" style="color: #47d0c5; text-decoration: none;" title="Ajouter">
+                                            {{ travail.total_depenses|default:'0' }} BIF
+                                            <a href="/depense_travail/{{travail.id}}/" style="color: #47d0c5; text-decoration: none; " title="Ajouter ">
                                                 +
                                             </a>
                                         </td>
-                                        <td title="Valeur">{{ travail.valeur }} BIF</td>
+                                        <td title="Valeur ">{{ travail.valeur }} BIF</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -151,8 +151,8 @@
                     </div>
                 </div>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
+            <div class="accordion-item ">
+                <h2 class="accordion-header ">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                         Travaux finis
                     </button>
@@ -160,7 +160,7 @@
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
                         <div class="col">
-                            <table class="table">
+                            <table class="table ">
                                 <thead>
                                     <tr>
                                         <th scope="col">Début</th>
@@ -177,10 +177,10 @@
                                     <tr>
                                         <td title="Date début">{{ travail_fini.date_debut}}</td>
                                         <td title="Date fin">{{ travail_fini.date_fin }}</td>
-                                        <td title="Titre">{{ forloop.counter }}. {{ travail_fini.titre}}</td>
+                                        <td title="Titre ">{{ forloop.counter }}. {{ travail_fini.titre}}</td>
                                         <td title="Propriétaire">{{ travail_fini.proprio }}</td>
                                         <td title="Adresse">{{ travail_fini.adresse }}</td>
-                                        <td title="Gain">
+                                        <td title="Gain ">
                                             {{ travail_fini.montant_net }} BIF
                                         </td>
                                         <td title="Valeur">{{ travail_fini.valeur }} BIF</td>

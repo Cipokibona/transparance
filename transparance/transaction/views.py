@@ -263,32 +263,38 @@ class TravailPagerView(View):
 
     def get(self, request):
         comptes = Compte.objects.filter(is_active=True)
-        travaux = Travail.objects.filter(is_active=True).annotate(
-            montant_paye = Sum('montantpayetravail__montant'),
-            depenses = Sum('depensetravail__montant')
-        )
-        travaux_finis = Travail.objects.filter(is_active=False).annotate(
-            montant_paye = Sum('montantpayetravail__montant'),
-            depenses = Sum('depensetravail__montant')
-        )
-        for travail in travaux_finis:
-            travail.montant_net = travail.montant_paye - (travail.depenses or 0)
+        travaux = Travail.objects.filter(is_active=True)
+        for travail in travaux:
+            total_depenses = travail.depenses.aggregate(Sum('montant'))['montant__sum'] or 0
+            total_avance = travail.avance_travail.aggregate(Sum('montant'))['montant__sum'] or 0
+            travail.total_depenses = total_depenses
+            travail.total_avance = total_avance
+        travaux_finis = Travail.objects.filter(is_active=False)
+        for travail_fini in travaux_finis:
+            final_depenses = travail_fini.depenses.aggregate(Sum('montant'))['montant__sum'] or 0
+            final_avance = travail_fini.avance_travail.aggregate(Sum('montant'))['montant__sum'] or 0
+            travail_fini.final_depenses = final_depenses
+            travail_fini.final_avance = final_avance
+            travail_fini.montant_net = travail_fini.final_avance - (travail_fini.final_depenses or 0)
         
-        return render (request, self.template_name, {'comptes':comptes,'travaux':travaux, 'travaux_finis':travaux_finis})
+        return render (request, self.template_name, {'comptes':comptes,'travaux':travaux,'travaux_finis':travaux_finis})
     
     def post(self, request):
         msg_error = False
         comptes = Compte.objects.filter(is_active=True)
-        travaux = Travail.objects.filter(is_active=True).annotate(
-            montant_paye = Sum('montantpayetravail__montant'),
-            depenses = Sum('depensetravail__montant')
-        )
-        travaux_finis = Travail.objects.filter(is_active=False).annotate(
-            montant_paye = Sum('montantpayetravail__montant'),
-            depenses = Sum('depensetravail__montant')
-        )
-        for travail in travaux_finis:
-            travail.montant_net = travail.montant_paye - (travail.depenses or 0)
+        travaux = Travail.objects.filter(is_active=True)
+        for travail in travaux:
+            total_depenses = travail.depenses.aggregate(Sum('montant'))['montant__sum'] or 0
+            total_avance = travail.avance_travail.aggregate(Sum('montant'))['montant__sum'] or 0
+            travail.total_depenses = total_depenses
+            travail.total_avance = total_avance
+        travaux_finis = Travail.objects.filter(is_active=False)
+        for travail_fini in travaux_finis:
+            final_depenses = travail_fini.depenses.aggregate(Sum('montant'))['montant__sum'] or 0
+            final_avance = travail_fini.avance_travail.aggregate(Sum('montant'))['montant__sum'] or 0
+            travail_fini.final_depenses = final_depenses
+            travail_fini.final_avance = final_avance
+            travail_fini.montant_net = travail_fini.final_avance - (travail_fini.final_depenses or 0)
 
         if request.method == 'POST':
             titre = request.POST.get("titre")
@@ -381,4 +387,51 @@ class AvanceTravailPageView(View):
                 msg_succes = True
             return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes})
 
-        return render (request, self.template_name, {'comptes':comptes,'travail':travail}) 
+        return render (request, self.template_name, {'comptes':comptes,'travail':travail})
+    
+class DepenseTravailPageView(View):
+
+    template_name = 'transaction/depense_travail.html'
+
+    def get(self, request, id):
+        comptes = Compte.objects.filter(is_active=True)
+        travail = Travail.objects.get(id=id)
+        
+        return render (request, self.template_name, {'comptes':comptes,'travail':travail})
+
+    def post(self, request, id):
+        comptes = Compte.objects.filter(is_active=True)
+        travail = Travail.objects.get(id=id)
+
+        if request.method == 'POST':
+            description = request.POST.get("description")
+            compte_id = request.POST.get("compte_emetteur")
+            montant = request.POST.get("montant")
+            # si le montant n'est pas saisi initialiser a zero
+            if montant == '' or compte_id == '':
+                msg_error = True
+                return render(request, self.template_name, {'comptes':comptes,'travail':travail})
+            else:
+                montant = int(montant)
+                compte_id = int(compte_id)
+                compte = Compte.objects.get(id=compte_id)
+                # annulation du retrait si le montant est inferieur a zero
+                if montant <= 0 or compte.montant < montant:
+                    msg_error = True
+                    return render(request, self.template_name, {'comptes':comptes,'travail':travail, 'msg_error':msg_error})
+                # creation du model MontantPayeTravail
+                depense_travail = DepenseTravail(
+                    travail = travail,
+                    author = request.user,
+                    description = description,
+                    compte = compte,
+                    montant = montant,
+                )
+                depense_travail.save()
+                # mis a jour du montant sur le compte selectionner
+                compte.montant = compte.montant - montant
+                compte.save()
+                msg_succes = True
+            return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes})
+
+        return render (request, self.template_name, {'comptes':comptes,'travail':travail})

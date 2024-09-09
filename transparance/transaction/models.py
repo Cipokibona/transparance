@@ -46,7 +46,7 @@ class Travail(models.Model):
 
 class MontantPayeTravail(models.Model):
 
-    travail = models.ForeignKey(Travail, null=True, on_delete=models.CASCADE)
+    travail = models.ForeignKey(Travail, related_name='avance_travail', on_delete=models.CASCADE)
     author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     description = models.fields.CharField(max_length=100)
     compte = models.ForeignKey(Compte, null=True, on_delete=models.CASCADE)
@@ -55,7 +55,7 @@ class MontantPayeTravail(models.Model):
 
 class DepenseTravail(models.Model):
 
-    travail = models.ForeignKey(Travail, null=True, on_delete=models.CASCADE)
+    travail = models.ForeignKey(Travail, related_name='depenses', on_delete=models.CASCADE)
     author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     description = models.fields.CharField(max_length=100)
     compte = models.ForeignKey(Compte, null=True, on_delete=models.CASCADE)
