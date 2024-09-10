@@ -231,6 +231,7 @@ class NewRetraitView(View):
     
     def post(self, request):
         msg_error = False
+        operations = Operation.objects.all().order_by('-date')
         comptes = Compte.objects.filter(is_active=True)
         sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
         total = sum_comptes['total']
@@ -268,8 +269,18 @@ class NewRetraitView(View):
                 # mis a jour du montant sur le compte selectionner
                 compte.montant = compte.montant - montant
                 compte.save()
+                # enregistrement de l'operation
+                operation = Operation(
+                    compte = compte,
+                    author = request.user,
+                    type_operation = 'Retrait',
+                    description = description,
+                    montant = montant,
+                    retrait = retrait,
+                )
+                operation.save()
                 msg_succes = True
-            return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total})
+            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
 
         return render (request, self.template_name)
     
@@ -296,9 +307,13 @@ class TravailPagerView(View):
         return render (request, self.template_name, {'comptes':comptes,'travaux':travaux,'travaux_finis':travaux_finis})
     
     def post(self, request):
+        
+        operations = Operation.objects.all().order_by('-date')
         msg_error = False
         comptes = Compte.objects.filter(is_active=True)
         travaux = Travail.objects.filter(is_active=True)
+        sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+        total = sum_comptes['total']
         for travail in travaux:
             total_depenses = travail.depenses.aggregate(Sum('montant'))['montant__sum'] or 0
             total_avance = travail.avance_travail.aggregate(Sum('montant'))['montant__sum'] or 0
@@ -346,14 +361,24 @@ class TravailPagerView(View):
                     compte = compte,
                     travail = travail,
                     montant = montant,
-                    description = f'Premier dépot'
+                    description = f'Première avance sur le projet {travail.titre}.'
                 )
                 montant_paye.save()
                 # mis a jour du montant sur le compte selectionner
                 compte.montant = compte.montant + montant
+                # enregistrement de l'operation
+                operation = Operation(
+                    compte = compte,
+                    author = request.user,
+                    type_operation = 'Dépot',
+                    description = montant_paye.description,
+                    montant = montant,
+                    avance = montant_paye,
+                )
+                operation.save()
                 compte.save()
                 msg_succes = True
-            return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes})
+            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
 
         return render (request, self.template_name)
     
@@ -369,8 +394,12 @@ class AvanceTravailPageView(View):
         return render (request, self.template_name, {'comptes':comptes,'travail':travail})
 
     def post(self, request, id):
+        
+        operations = Operation.objects.all().order_by('-date')
         comptes = Compte.objects.filter(is_active=True)
         travail = Travail.objects.get(id=id)
+        sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+        total = sum_comptes['total']
 
         if request.method == 'POST':
             description = request.POST.get("description")
@@ -402,13 +431,23 @@ class AvanceTravailPageView(View):
                 compte.save()
                 # classer le travail en travaux finis au cas ou le payement total est egal a la valeur du travail
                 somme_totale = MontantPayeTravail.objects.filter(travail=travail).aggregate(Sum('montant'))
-                total = somme_totale['montant__sum']
-                if travail.valeur <= total:
+                total_avance = somme_totale['montant__sum']
+                if travail.valeur <= total_avance:
                     travail.is_active = False
                     travail.date_fin = timezone.now()
                     travail.save()
+                # enregistrement de l'operation
+                operation = Operation(
+                    compte = compte,
+                    author = request.user,
+                    type_operation = 'Dépot',
+                    description = description,
+                    montant = montant,
+                    avance = avance_travail,
+                )
+                operation.save()
                 msg_succes = True
-            return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes})
+            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
 
         return render (request, self.template_name, {'comptes':comptes,'travail':travail})
     
