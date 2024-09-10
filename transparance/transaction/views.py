@@ -4,6 +4,7 @@ from django.views.generic import View
 from authentification.models import User
 from transaction.models import Compte, CompteEnCompte, Depense, Retrait, Travail, MontantPayeTravail, DepenseTravail
 from django.db.models import Sum
+from django.utils import timezone
 
 
 @login_required
@@ -384,6 +385,13 @@ class AvanceTravailPageView(View):
                 # mis a jour du montant sur le compte selectionner
                 compte.montant = compte.montant + montant
                 compte.save()
+                # classer le travail en travaux finis au cas ou le payement total est egal a la valeur du travail
+                somme_totale = MontantPayeTravail.objects.filter(travail=travail).aggregate(Sum('montant'))
+                total = somme_totale['montant__sum']
+                if travail.valeur <= total:
+                    travail.is_active = False
+                    travail.date_fin = timezone.now()
+                    travail.save()
                 msg_succes = True
             return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes})
 
