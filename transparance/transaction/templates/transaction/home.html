@@ -97,7 +97,7 @@
                         <td title="Date de l'opération">{{ operation.date }}</td>
                         <td title="Type d'opération">{{ operation.type_operation }}</td>
                         <td title="Déscription">{{ operation.description }}</td>
-                        <td title="Déscription">{{ operation.author }}</td>
+                        <td title="Auteur">{{ operation.author.last_name }}</td>
                         <td title="Montant">{{ operation.montant }} BIF</td>
                     </tr>
                     {% endfor %}

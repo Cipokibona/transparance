@@ -101,7 +101,9 @@ class NewUserPageView(View):
                 comptes = Compte.objects.filter(is_active=True)
                 sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
                 total = sum_comptes['total']
-                return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total})
+                
+                operations = Operation.objects.all().order_by('-date')
+                return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total,'operations':operations})
             else:
                 msg_error = True
             
@@ -190,6 +192,8 @@ class NewComptePageView(View):
     def post(self, request):
         msg_error = False
         if request.method == 'POST':
+            
+            operations = Operation.objects.all().order_by('-date')
             compte_name = request.POST.get("name")
             description = request.POST.get("description")
             montant = request.POST.get("montant")
@@ -212,7 +216,7 @@ class NewComptePageView(View):
             comptes = Compte.objects.filter(is_active=True)
             sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
             total = sum_comptes['total']
-            return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total})
+            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
 
         return render (request, self.template_name, {'msg_error':msg_error})
     
@@ -462,8 +466,12 @@ class DepenseTravailPageView(View):
         return render (request, self.template_name, {'comptes':comptes,'travail':travail})
 
     def post(self, request, id):
+
+        operations = Operation.objects.all().order_by('-date')
         comptes = Compte.objects.filter(is_active=True)
         travail = Travail.objects.get(id=id)
+        sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+        total = sum_comptes['total']
 
         if request.method == 'POST':
             description = request.POST.get("description")
@@ -493,7 +501,17 @@ class DepenseTravailPageView(View):
                 # mis a jour du montant sur le compte selectionner
                 compte.montant = compte.montant - montant
                 compte.save()
+                # enregistrement de l'operation
+                operation = Operation(
+                    compte = compte,
+                    author = request.user,
+                    type_operation = 'Retrait',
+                    description = description,
+                    montant = montant,
+                    depense_travail = depense_travail,
+                )
+                operation.save()
                 msg_succes = True
-            return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes})
+            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
 
         return render (request, self.template_name, {'comptes':comptes,'travail':travail})
