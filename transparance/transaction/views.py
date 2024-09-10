@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from authentification.models import User
-from transaction.models import Compte, CompteEnCompte, Depense, Retrait, Travail, MontantPayeTravail, DepenseTravail
+from transaction.models import Compte, CompteEnCompte, Depense, Retrait, Travail, MontantPayeTravail, DepenseTravail, Operation
 from django.db.models import Sum
 from django.utils import timezone
 
@@ -13,8 +13,9 @@ def home (request):
     comptes = Compte.objects.filter(is_active=True)
     sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
     total = sum_comptes['total']
+    operations = Operation.objects.all().order_by('-date')
 
-    return render (request,'transaction/home.html', {'comptes':comptes,'total':total})
+    return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations})
 
 
 @login_required
@@ -117,7 +118,10 @@ class TransactionPageView(View):
         return render (request, self.template_name, {'comptes':comptes})
 
     def post(self, request):
+        operations = Operation.objects.all().order_by('-date')
         comptes = Compte.objects.filter(is_active=True)
+        sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+        total = sum_comptes['total']
         msg_error = False
         if request.method == 'POST':
             emetteur = request.POST.get("compte_emetteur")
@@ -160,6 +164,17 @@ class TransactionPageView(View):
                         montant=montant,
                     )
                     transfer.save()
+                    # enregistrement de l'operation
+                    operation = Operation(
+                        compte_en_compte = transfer,
+                        author = request.user,
+                        type_operation = 'Compte en compte',
+                        description = f'De {compte_emetteur.name} à {compte_recepteur.name}',
+                        montant = montant,
+                    )
+                    operation.save()
+                    msg_succes = True
+                    return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
                 
         return render(request, self.template_name,{'comptes':comptes})
     
