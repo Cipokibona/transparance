@@ -61,3 +61,16 @@ class DepenseTravail(models.Model):
     compte = models.ForeignKey(Compte, null=True, on_delete=models.CASCADE)
     montant = models.IntegerField(null=True, blank=True)
     date = models.DateTimeField(default=timezone.now)
+
+class Operation(models.Model):
+
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    compte = models.ForeignKey(Compte, on_delete=models.SET_NULL, null=True, blank=True)
+    compte_en_compte = models.ForeignKey(CompteEnCompte, on_delete=models.SET_NULL, null=True, blank=True)
+    retrait = models.ForeignKey(Retrait, on_delete=models.SET_NULL, null=True, blank=True)
+    avance = models.ForeignKey(MontantPayeTravail, on_delete=models.SET_NULL, null=True, blank=True)
+    depense_travail = models.ForeignKey(DepenseTravail, on_delete=models.SET_NULL, null=True, blank=True)
+    type_operation = models.fields.CharField(max_length=100)
+    description = models.fields.CharField(max_length=100)
+    montant = models.IntegerField(null=True, blank=True)
+    date = models.DateTimeField(default=timezone.now)
