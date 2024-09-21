@@ -66,7 +66,7 @@
                             <form action="" method="post" id="depense_unique" class="visible">
                                 {% csrf_token %}
                                 <div class="shadow-sm p-3 mb-5 rounded">
-                                    <button id="multiple_depense">Dépenses détaillées</button>
+                                    <button id="multiple_depense" class="btn btn-primary" style="background-color: #47d0c5;">Dépenses détaillées</button>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Déscription</label>
                                         <input type="text" class="form-control" name="description" placeholder="Déscription sur la dépense">
@@ -97,7 +97,7 @@
                             <form action="" method="post" id="depense_multiple" class="hidden">
                                 {% csrf_token %}
                                 <div class="shadow-sm p-3 mb-5 rounded">
-                                    <button id="unique_depense">Dépense simple</button>
+                                    <button id="unique_depense" class="btn btn-primary" style="background-color: #47d0c5;">Dépense simple</button>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Déscription</label>
                                         <input type="text" class="form-control" name="description" placeholder="Déscription sur la dépense">
@@ -113,31 +113,37 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="dep1" class="form-label">Dépense 1</label>
-                                        <input type="text" class="form-control" name="dep1">
-                                        <label for="montant" class="form-label">Montant</label>
-                                        <input type="number" class="form-control" name="montant" value=0>
+                                    <div id="depense">
+                                        <div class="mb-3">
+                                            <label for="dep1">Dépense 1:</label>
+                                            <input type="text" name="dep1">
+                                            <label for="montant1">Montant:</label>
+                                            <input type="number" name="montant1" value=0>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="dep2">Dépense 2:</label>
+                                            <input type="text" name="dep2">
+                                            <label for="montant2">Montant:</label>
+                                            <input type="number" name="montant2" value=0>
+                                        </div>
                                     </div>
-                                    <div class="mb-3"></div>
-                                    <label for="dep2" class="form-label">Dépense 2</label>
-                                    <input type="text" class="form-control" name="dep2">
-                                    <label for="montant" class="form-label">Montant</label>
-                                    <input type="number" class="form-control" name="montant" value=0>
-                                </div>
-                                <div class="d-grid gap-2 mx-auto">
-                                    {% if msg_error %}
-                                    <label for="remember-me" class="text-info">
+                                    <div class="mb-3" id="other_depense">
+                                        <input type="number" id='nombre_total_depense' name="nombre_total_depense" value=2 class="hidden">
+                                        <button id="add_depense" class="btn btn-primary" style="background-color: #47d0c5;">+</button>
+                                    </div>
+                                    <div class="d-grid gap-2 mx-auto">
+                                        {% if msg_error %}
+                                        <label for="remember-me" class="text-info">
                                         <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
-                                    <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Save">
+                                        <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Save">
+                                    </div>
                                 </div>
+                            </form>
                         </div>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <script>
         document.getElementById('multiple_depense').addEventListener('click', function(event) {
@@ -156,7 +162,7 @@
         document.getElementById('unique_depense').addEventListener('click', function(event) {
             event.preventDefault();
             var form_depense_unique = document.getElementById('depense_unique');
-            var form_depense_multiple = document.getElementById('depense_multiple')
+            var form_depense_multiple = document.getElementById('depense_multiple');
             if (form_depense_unique.classList.contains('hidden')) {
 
                 form_depense_unique.classList.remove('hidden');
@@ -165,6 +171,39 @@
                 form_depense_multiple.classList.add('hidden');
 
             }
+        })
+        document.getElementById('other_depense').addEventListener('click', function(event) {
+            event.preventDefault();
+            // recuperation de la balise div contenant les inputs depense
+            var div_depense = document.getElementById('depense');
+            // recuperation de nombre de input
+            var inputs = document.getElementById('nombre_total_depense');
+            var newInputIndex = inputs.value;
+            newInputIndex = Number(newInputIndex);
+            // ajout de la nouvelle input
+            newInputIndex = newInputIndex + 1;
+            inputs.value = newInputIndex;
+            // creation d'une div pour la nouvelle depense et sa class
+            var new_div_depense = document.createElement('div');
+            new_div_depense.className = 'mb-3';
+            // nouveaux input des depenses
+            var new_label_text = document.createElement('label');
+            new_label_text.for = 'dep' + newInputIndex;
+            new_label_text.textContent = 'Dépense ' + newInputIndex + ':';
+            var new_input_text = document.createElement('input');
+            new_input_text.name = 'dep' + newInputIndex;
+            var new_label_montant = document.createElement('label');
+            new_label_montant.for = 'montant' + newInputIndex;
+            new_label_montant.textContent = ' Montant :';
+            var new_input_montant = document.createElement('input');
+            new_input_montant.name = 'montant' + newInputIndex;
+            new_input_montant.value = 0;
+            // ajouter les balises label et input dans la nouvelle div depenses
+            new_div_depense.appendChild(new_label_text);
+            new_div_depense.appendChild(new_input_text);
+            new_div_depense.appendChild(new_label_montant);
+            new_div_depense.appendChild(new_input_montant);
+            div_depense.appendChild(new_div_depense);
         })
     </script>
 </body>
