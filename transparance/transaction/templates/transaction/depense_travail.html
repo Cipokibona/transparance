@@ -188,15 +188,17 @@
             new_div_depense.className = 'mb-3';
             // nouveaux input des depenses
             var new_label_text = document.createElement('label');
-            new_label_text.for = 'dep' + newInputIndex;
+            new_label_text.setAttribute('for', 'dep' + newInputIndex);
             new_label_text.textContent = 'Dépense ' + newInputIndex + ':';
             var new_input_text = document.createElement('input');
             new_input_text.name = 'dep' + newInputIndex;
+            new_input_text.type = 'text';
             var new_label_montant = document.createElement('label');
-            new_label_montant.for = 'montant' + newInputIndex;
+            new_label_montant.setAttribute('for', 'montant' + newInputIndex);
             new_label_montant.textContent = ' Montant :';
             var new_input_montant = document.createElement('input');
             new_input_montant.name = 'montant' + newInputIndex;
+            new_input_montant.type = 'number';
             new_input_montant.value = 0;
             // ajouter les balises label et input dans la nouvelle div depenses
             new_div_depense.appendChild(new_label_text);

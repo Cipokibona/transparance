@@ -472,46 +472,52 @@ class DepenseTravailPageView(View):
         travail = Travail.objects.get(id=id)
 
         if request.method == 'POST':
-            description = request.POST.get("description")
-            compte_id = request.POST.get("compte_emetteur")
-            montant = request.POST.get("montant")
-            # si le montant n'est pas saisi initialiser a zero
-            if montant == '' or compte_id == '':
-                msg_error = True
-                return render(request, self.template_name, {'comptes':comptes,'travail':travail})
-            else:
-                montant = int(montant)
-                compte_id = int(compte_id)
-                compte = Compte.objects.get(id=compte_id)
-                # annulation du retrait si le montant est inferieur a zero
-                if montant <= 0 or compte.montant < montant:
+            nombre_total_depense = request.POST.get("nombre_total_depense")
+            nombre_total_depense = int(nombre_total_depense)
+            # si c'est une dépense unique
+            if nombre_total_depense < 3:
+                description = request.POST.get("description")
+                compte_id = request.POST.get("compte_emetteur")
+                montant = request.POST.get("montant")
+                # si le montant n'est pas saisi initialiser a zero
+                if montant == '' or compte_id == '':
                     msg_error = True
-                    return render(request, self.template_name, {'comptes':comptes,'travail':travail, 'msg_error':msg_error})
-                # creation du model MontantPayeTravail
-                depense_travail = DepenseTravail(
-                    travail = travail,
-                    author = request.user,
-                    description = description,
-                    compte = compte,
-                    montant = montant,
-                )
-                depense_travail.save()
-                # mis a jour du montant sur le compte selectionner
-                compte.montant = compte.montant - montant
-                compte.save()
-                # enregistrement de l'operation
-                operation = Operation(
-                    compte = compte,
-                    author = request.user,
-                    type_operation = 'Retrait',
-                    description = description,
-                    montant = montant,
-                    depense_travail = depense_travail,
-                )
-                operation.save()
-                msg_succes = True
-                sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
-                total = sum_comptes['total']
-            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+                    return render(request, self.template_name, {'comptes':comptes,'travail':travail})
+                else:
+                    montant = int(montant)
+                    compte_id = int(compte_id)
+                    compte = Compte.objects.get(id=compte_id)
+                    # annulation du retrait si le montant est inferieur a zero
+                    if montant <= 0 or compte.montant < montant:
+                        msg_error = True
+                        return render(request, self.template_name, {'comptes':comptes,'travail':travail, 'msg_error':msg_error})
+                    # creation du model MontantPayeTravail
+                    depense_travail = DepenseTravail(
+                        travail = travail,
+                        author = request.user,
+                        description = description,
+                        compte = compte,
+                        montant = montant,
+                    )
+                    depense_travail.save()
+                    # mis a jour du montant sur le compte selectionner
+                    compte.montant = compte.montant - montant
+                    compte.save()
+                    # enregistrement de l'operation
+                    operation = Operation(
+                        compte = compte,
+                        author = request.user,
+                        type_operation = 'Retrait',
+                        description = description,
+                        montant = montant,
+                        depense_travail = depense_travail,
+                    )
+                    operation.save()
+                    msg_succes = True
+                    sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+                    total = sum_comptes['total']
+                return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+            else:
+                return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
 
         return render (request, self.template_name, {'comptes':comptes,'travail':travail})
