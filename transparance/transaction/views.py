@@ -475,7 +475,7 @@ class DepenseTravailPageView(View):
             nombre_total_depense = request.POST.get("nombre_total_depense")
             nombre_total_depense = int(nombre_total_depense)
             # si c'est une dépense unique
-            if nombre_total_depense < 3:
+            if nombre_total_depense < 2:
                 description = request.POST.get("description")
                 compte_id = request.POST.get("compte_emetteur")
                 montant = request.POST.get("montant")
