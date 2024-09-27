@@ -23,6 +23,7 @@ class Depense(models.Model):
 
     titre = models.fields.CharField(max_length=100)
     description = models.fields.CharField(max_length=100)
+    montant = models.IntegerField(null=True, blank=True)
     fixe = models.BooleanField(default=False)
 
 class Retrait(models.Model):
