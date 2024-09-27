@@ -87,7 +87,7 @@
                                         <input type="number" class="form-control" name="montant" value=0>
                                     </div>
                                     <div class="mb-3" id="other_depense">
-                                        <input type="number" id='nombre_total_depense' name="nombre_total_depense" value=1 class="hidden">
+                                        <input type="number" name="nombre_total_depense" value=1 class="hidden">
                                     </div>
                                     <div class="d-grid gap-2 mx-auto">
                                         {% if msg_error %}
@@ -175,7 +175,7 @@
 
             }
         })
-        document.getElementById('other_depense').addEventListener('click', function(event) {
+        document.getElementById('add_depense').addEventListener('click', function(event) {
             event.preventDefault();
             // recuperation de la balise div contenant les inputs depense
             var div_depense = document.getElementById('depense');

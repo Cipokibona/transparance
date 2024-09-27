@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from authentification.models import User
-from transaction.models import Compte, CompteEnCompte, Depense, Retrait, Travail, MontantPayeTravail, DepenseTravail, Operation
+from transaction.models import Compte, CompteEnCompte, Depense, Retrait, Travail, MontantPayeTravail, DepenseTravail, Operation, DepenseDetailTravail
 from django.db.models import Sum
 from django.utils import timezone
 
@@ -458,6 +458,7 @@ class AvanceTravailPageView(View):
 class DepenseTravailPageView(View):
 
     template_name = 'transaction/depense_travail.html'
+    msg_error = False
 
     def get(self, request, id):
         comptes = Compte.objects.filter(is_active=True)
@@ -474,15 +475,15 @@ class DepenseTravailPageView(View):
         if request.method == 'POST':
             nombre_total_depense = request.POST.get("nombre_total_depense")
             nombre_total_depense = int(nombre_total_depense)
+            description = request.POST.get("description")
+            compte_id = request.POST.get("compte_emetteur")
             # si c'est une dépense unique
             if nombre_total_depense < 2:
-                description = request.POST.get("description")
-                compte_id = request.POST.get("compte_emetteur")
                 montant = request.POST.get("montant")
-                # si le montant n'est pas saisi initialiser a zero
+                # msg error si le montant ou le code ne sont pas saisi
                 if montant == '' or compte_id == '':
                     msg_error = True
-                    return render(request, self.template_name, {'comptes':comptes,'travail':travail})
+                    return render(request, self.template_name, {'comptes':comptes,'travail':travail, 'msg_error':msg_error})
                 else:
                     montant = int(montant)
                     compte_id = int(compte_id)
@@ -518,6 +519,64 @@ class DepenseTravailPageView(View):
                     total = sum_comptes['total']
                 return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
             else:
-                return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+                # si c'est une depense détaillée
+                montant_total = 0
+                i = nombre_total_depense
+                if compte_id == '':
+                    msg_error = True
+                    return render(request, self.template_name, {'comptes':comptes,'travail':travail,'msg_error':msg_error})
+                
+                compte_id = int(compte_id)
+                compte = Compte.objects.get(id=compte_id)
+                # creation de la depense principal
+                depense_travail = DepenseTravail(
+                        travail = travail,
+                        author = request.user,
+                        description = description,
+                        compte = compte,
+                    )
+                depense_travail.save()
+                # tant que le nombre de depense est superieur a 0
+                while i > 0:
+                    montant_i = request.POST.get("montant{}".format(i))
+                    dep_i = request.POST.get(f"dep{i}")
+                    if montant_i == '':
+                        msg_error = True
+                        depense_travail.delete()
+                        return render(request, self.template_name, {'comptes':comptes,'travail':travail,'msg_error':msg_error})
+                    montant_i = int(montant_i)
+                    montant_total = montant_total + montant_i
+                    depense_i = DepenseDetailTravail(
+                        depense_source = depense_travail,
+                        depense = dep_i,
+                        montant = montant_i,
+                    )
+                    depense_i.save()
+                    depense_travail.montant = montant_total
+                    i = i-1
+                # annulation du retrait si le montant est inferieur a zero
+                if montant_total <= 0 or compte.montant < montant_total:
+                    msg_error = True
+                    return render(request, self.template_name, {'comptes':comptes,'travail':travail, 'msg_error':msg_error})
+                # mis a jour du compte
+                compte.montant = compte.montant - montant_total
+                compte.save()
+                # enregistrement de la depense
+                depense_travail.save()
+                # enregistrement de l'operation
+                operation = Operation(
+                    compte = compte,
+                    author = request.user,
+                    type_operation = 'Retrait',
+                    description = description + f' (Plusieurs dépenses)',
+                    montant = montant_total,
+                    depense_travail = depense_travail,
+                )
+                operation.save()
+                msg_succes = True
+                sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+                total = sum_comptes['total']
+
+            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
 
         return render (request, self.template_name, {'comptes':comptes,'travail':travail})

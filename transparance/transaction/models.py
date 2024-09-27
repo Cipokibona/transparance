@@ -62,6 +62,12 @@ class DepenseTravail(models.Model):
     montant = models.IntegerField(null=True, blank=True)
     date = models.DateTimeField(default=timezone.now)
 
+class DepenseDetailTravail(models.Model):
+
+    depense_source = models.ForeignKey(DepenseTravail, null=True, on_delete=models.CASCADE)
+    depense = models.fields.CharField(max_length=100)
+    montant = models.IntegerField(null=True, blank=True)
+
 class Operation(models.Model):
 
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
