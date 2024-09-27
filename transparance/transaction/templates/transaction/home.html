@@ -96,9 +96,18 @@
                         <th scope="row">{{ forloop.counter }}</th>
                         <td title="Date de l'opération">{{ operation.date }}</td>
                         <td title="Type d'opération">{{ operation.type_operation }}</td>
-                        <td title="Déscription">{{ operation.description }}</td>
+                        <td title="Déscription">
+                            <a href="/avance_travail/{{travail.id}}/" style="color: #47d0c5; text-decoration: none;" title="voir l'opération">
+                                {{ operation.description }}
+                            </a>
+                        </td>
                         <td title="Auteur">{{ operation.author.last_name }}</td>
-                        <td title="Montant">{{ operation.montant }} BIF</td>
+                        <td title="Montant">
+                            {{ operation.montant }} BIF
+                            <a href="/avance_travail/{{travail.id}}/" style="color: #ff0000; text-decoration: none;" title="Annuler l'opération">
+                                annuler
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
