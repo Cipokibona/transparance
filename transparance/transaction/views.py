@@ -17,6 +17,46 @@ def home (request):
 
     return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations})
 
+@login_required
+def operation(request, id):
+
+    is_compte_en_compte = False
+    is_retrait = False
+    is_depot = False
+    is_depense_travail = False
+    is_depense_detail = False
+    # recuperation de l'opération
+    operation = Operation.objects.get(id=id)
+    # Vérification de type d'opération
+    if operation.type_operation == 'Compte en compte':
+        is_compte_en_compte = True
+        
+    if operation.type_operation == 'Retrait':
+        is_retrait = True
+
+    if operation.type_operation == 'Dépot':
+        is_depot = True
+
+    if operation.type_operation == 'Dépense sur travail':
+        is_depense_travail = True
+
+    if operation.type_operation == 'Dépenses détaillées':
+        is_depense_detail = True
+        depense_source = DepenseTravail.objects.get(id=operation.depense_travail.id)
+        depenses = DepenseDetailTravail.objects.filter(depense_source=depense_source)
+
+    return render (
+        request,
+        'transaction/operation.html',
+        {
+            'operation':operation,
+            'is_compte_en_compte':is_compte_en_compte,
+            'is_retrait':is_retrait,
+            'is_depot':is_depot,
+            'is_depense_travail':is_depense_travail,
+            'is_depense_detail':is_depense_detail,
+            'depenses':depenses,
+            })    
 
 @login_required
 def travail (request):
@@ -508,7 +548,7 @@ class DepenseTravailPageView(View):
                     operation = Operation(
                         compte = compte,
                         author = request.user,
-                        type_operation = 'Retrait',
+                        type_operation = 'Dépense sur travail',
                         description = description,
                         montant = montant,
                         depense_travail = depense_travail,
@@ -567,7 +607,7 @@ class DepenseTravailPageView(View):
                 operation = Operation(
                     compte = compte,
                     author = request.user,
-                    type_operation = 'Retrait',
+                    type_operation = 'Dépenses détaillées',
                     description = description + f' (Plusieurs dépenses)',
                     montant = montant_total,
                     depense_travail = depense_travail,

@@ -32,4 +32,5 @@ urlpatterns = [
     path('depense/', trans.NewRetraitView.as_view(), name='depense'),
     path('avance_travail/<int:id>/', trans.AvanceTravailPageView.as_view(), name='avance_travail'),
     path('depense_travail/<int:id>/', trans.DepenseTravailPageView.as_view(), name='depense_travail'),
+    path('operation/<int:id>/', trans.operation, name='operation'),
 ]
