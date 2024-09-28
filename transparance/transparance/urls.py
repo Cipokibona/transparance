@@ -33,4 +33,5 @@ urlpatterns = [
     path('avance_travail/<int:id>/', trans.AvanceTravailPageView.as_view(), name='avance_travail'),
     path('depense_travail/<int:id>/', trans.DepenseTravailPageView.as_view(), name='depense_travail'),
     path('operation/<int:id>/', trans.operation, name='operation'),
+    path('delete_operation/<int:id>/', trans.annuler, name='delete_operation'),
 ]

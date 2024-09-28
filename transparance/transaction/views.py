@@ -5,6 +5,7 @@ from authentification.models import User
 from transaction.models import Compte, CompteEnCompte, Depense, Retrait, Travail, MontantPayeTravail, DepenseTravail, Operation, DepenseDetailTravail
 from django.db.models import Sum
 from django.utils import timezone
+from transaction.operation_fonction import annuler_operation
 
 
 @login_required
@@ -57,7 +58,14 @@ def operation(request, id):
             'is_depense_travail':is_depense_travail,
             'is_depense_detail':is_depense_detail,
             'depenses':depenses,
-            })    
+            })
+
+@login_required
+def annuler(request,id):
+
+    annuler_operation(id)
+
+    return redirect('home')
 
 @login_required
 def travail (request):
@@ -279,7 +287,7 @@ class NewRetraitView(View):
     
     def post(self, request):
         msg_error = False
-        operations = Operation.objects.all().order_by('-date')
+        # operations = Operation.objects.all().order_by('-date')
         comptes = Compte.objects.filter(is_active=True)
         if request.method == 'POST':
             titre = request.POST.get("titre")
@@ -357,12 +365,12 @@ class TravailPagerView(View):
     
     def post(self, request):
         
-        operations = Operation.objects.all().order_by('-date')
+        # operations = Operation.objects.all().order_by('-date')
         msg_error = False
         comptes = Compte.objects.filter(is_active=True)
         travaux = Travail.objects.filter(is_active=True)
-        sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
-        total = sum_comptes['total']
+        # sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+        # total = sum_comptes['total']
         for travail in travaux:
             total_depenses = travail.depenses.aggregate(Sum('montant'))['montant__sum'] or 0
             total_avance = travail.avance_travail.aggregate(Sum('montant'))['montant__sum'] or 0
@@ -445,7 +453,7 @@ class AvanceTravailPageView(View):
 
     def post(self, request, id):
         
-        operations = Operation.objects.all().order_by('-date')
+        # operations = Operation.objects.all().order_by('-date')
         comptes = Compte.objects.filter(is_active=True)
         travail = Travail.objects.get(id=id)
 
@@ -515,7 +523,7 @@ class DepenseTravailPageView(View):
 
     def post(self, request, id):
 
-        operations = Operation.objects.all().order_by('-date')
+        # operations = Operation.objects.all().order_by('-date')
         comptes = Compte.objects.filter(is_active=True)
         travail = Travail.objects.get(id=id)
 
@@ -539,7 +547,7 @@ class DepenseTravailPageView(View):
                     if montant <= 0 or compte.montant < montant:
                         msg_error = True
                         return render(request, self.template_name, {'comptes':comptes,'travail':travail, 'msg_error':msg_error})
-                    # creation du model MontantPayeTravail
+                    # creation du model DepenseTravail
                     depense_travail = DepenseTravail(
                         travail = travail,
                         author = request.user,
