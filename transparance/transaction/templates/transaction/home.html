@@ -105,14 +105,17 @@
                             <td title="Montant">
                                 {{ operation.montant }} BIF
                                 <a href="/avance_travail/{{travail.id}}/" style="color: #ff0000; text-decoration: none;" title="Annuler l'opération">
-                                annuler
-                            </a>
+                                    annuler
+                                </a>
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
+            <a href="/avance_travail/{{travail.id}}/" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+                Tout voir
+            </a>
         </div>
     </div>
 </body>

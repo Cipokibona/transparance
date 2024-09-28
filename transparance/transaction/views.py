@@ -13,7 +13,7 @@ def home (request):
     comptes = Compte.objects.filter(is_active=True)
     sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
     total = sum_comptes['total']
-    operations = Operation.objects.all().order_by('-date')
+    operations = Operation.objects.all().order_by('-date')[:10]
 
     return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations})
 
