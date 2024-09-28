@@ -25,6 +25,7 @@ def operation(request, id):
     is_depot = False
     is_depense_travail = False
     is_depense_detail = False
+    depenses = ''
     # recuperation de l'opération
     operation = Operation.objects.get(id=id)
     # Vérification de type d'opération
@@ -137,13 +138,14 @@ class NewUserPageView(View):
                         is_staff = True,
                     )
                 user.save()
-                msg_succes = True
-                comptes = Compte.objects.filter(is_active=True)
-                sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
-                total = sum_comptes['total']
+                # msg_succes = True
+                # comptes = Compte.objects.filter(is_active=True)
+                # sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+                # total = sum_comptes['total']
                 
-                operations = Operation.objects.all().order_by('-date')
-                return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total,'operations':operations})
+                # operations = Operation.objects.all().order_by('-date')
+                # return render (request, 'transaction/home.html', {'comptes':comptes, 'msg_succes':msg_succes,'total':total,'operations':operations})
+                return redirect ('home')
             else:
                 msg_error = True
             
@@ -215,8 +217,9 @@ class TransactionPageView(View):
                         montant = montant,
                     )
                     operation.save()
-                    msg_succes = True
-                    return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+                    # msg_succes = True
+                    # return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+                    return redirect('home')
                 
         return render(request, self.template_name,{'comptes':comptes})
     
@@ -252,11 +255,12 @@ class NewComptePageView(View):
 
             )
             new_compte.save()
-            msg_succes = True
-            comptes = Compte.objects.filter(is_active=True)
-            sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
-            total = sum_comptes['total']
-            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+            # msg_succes = True
+            # comptes = Compte.objects.filter(is_active=True)
+            # sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+            # total = sum_comptes['total']
+            # return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+            return redirect ('home')
 
         return render (request, self.template_name, {'msg_error':msg_error})
     
@@ -321,10 +325,11 @@ class NewRetraitView(View):
                     retrait = retrait,
                 )
                 operation.save()
-                msg_succes = True
+                # msg_succes = True
                 sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
                 total = sum_comptes['total']
-            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+            # return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+            return redirect ('home')
 
         return render (request, self.template_name)
     
@@ -421,8 +426,9 @@ class TravailPagerView(View):
                 )
                 operation.save()
                 compte.save()
-                msg_succes = True
-            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+                # msg_succes = True
+            # return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+            return redirect ('home')
 
         return render (request, self.template_name)
     
@@ -488,10 +494,11 @@ class AvanceTravailPageView(View):
                     avance = avance_travail,
                 )
                 operation.save()
-                msg_succes = True
-                sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
-                total = sum_comptes['total']
-            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+                # msg_succes = True
+                # sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+                # total = sum_comptes['total']
+            # return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+            return redirect ('home')
 
         return render (request, self.template_name, {'comptes':comptes,'travail':travail})
     
@@ -554,10 +561,11 @@ class DepenseTravailPageView(View):
                         depense_travail = depense_travail,
                     )
                     operation.save()
-                    msg_succes = True
-                    sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
-                    total = sum_comptes['total']
-                return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+                    # msg_succes = True
+                    # sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+                    # total = sum_comptes['total']
+                # return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+                return redirect ('home')
             else:
                 # si c'est une depense détaillée
                 montant_total = 0
@@ -613,10 +621,11 @@ class DepenseTravailPageView(View):
                     depense_travail = depense_travail,
                 )
                 operation.save()
-                msg_succes = True
+                # msg_succes = True
                 sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
-                total = sum_comptes['total']
+                # total = sum_comptes['total']
 
-            return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+            # return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations,'msg_succes':msg_succes})
+            return redirect ('home')
 
         return render (request, self.template_name, {'comptes':comptes,'travail':travail})
