@@ -50,6 +50,18 @@
                 Retour
             </a>
             <div class="col table-responsive">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="shadow-sm p-3 mb-5 rounded">
+                        <div class="mb-3">
+                            <label for="debut">De</label>
+                            <input type="date" name="debut">
+                            <label for="fin">à</label>
+                            <input type="date" name="fin">
+                            <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Chercher">
+                        </div>
+                    </div>
+                </form>
                 <table class="table">
                     <thead>
                         <tr>

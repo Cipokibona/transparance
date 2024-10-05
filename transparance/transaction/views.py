@@ -641,12 +641,34 @@ class DepenseTravailPageView(View):
 class AllOperations(View):
 
     template_name = 'transaction/all_operations.html'
+    operations = Operation.objects.all().order_by('-date')
 
     def get(self, request):
-        operations = Operation.objects.all().order_by('-date')
         
-        return render (request, self.template_name, {'operations':operations})
+        return render (request, self.template_name, {'operations':self.operations})
     
     def post(self, request):
 
-        return render (request, self.template_name)
+        if request.method == 'POST':
+
+            date_debut = request.POST.get("debut")
+            date_fin = request.POST.get("fin")
+
+            # au cas ou rien n'est saisi
+            if date_debut == '' and date_fin == '':
+                return render (request, self.template_name, {'operations':self.operations})
+            
+            # au cas ou c'est la date debut seulement qui est saisi
+            if date_fin == '':
+                operations = Operation.objects.filter(date__gte=date_debut)
+                return render (request, self.template_name, {'operations':operations})
+            
+            # au cas ou c'est la date fin seulement qui est saisi
+            if date_debut == '':
+                operations = Operation.objects.filter(date__lte=date_fin)
+                return render (request, self.template_name, {'operations':operations})
+            
+            # au cas ou la date debut et la date fin sont saisies
+            operations = Operation.objects.filter(date__gte=date_debut,date__lte=date_fin)
+
+        return render (request, self.template_name, {'operations':operations})
