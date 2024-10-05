@@ -637,3 +637,16 @@ class DepenseTravailPageView(View):
             return redirect ('home')
 
         return render (request, self.template_name, {'comptes':comptes,'travail':travail})
+    
+class AllOperations(View):
+
+    template_name = 'transaction/all_operations.html'
+
+    def get(self, request):
+        operations = Operation.objects.all().order_by('-date')
+        
+        return render (request, self.template_name, {'operations':operations})
+    
+    def post(self, request):
+
+        return render (request, self.template_name)
