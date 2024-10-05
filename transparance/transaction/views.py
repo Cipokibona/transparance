@@ -179,11 +179,13 @@ class TransactionPageView(View):
             emetteur = request.POST.get("compte_emetteur")
             recepteur = request.POST.get("compte_recepteur")
             montant_saisi = request.POST.get("montant")
-            if montant_saisi == '':
+            frais_transaction = request.POST.get("frais_transaction")
+            if montant_saisi == '' or frais_transaction == '':
                 msg_error = True
                 return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
             else:
                 montant = int(montant_saisi)
+                frais_transaction = int(frais_transaction)
 
             # vérification de la valeur recuperer
             if emetteur == '' or recepteur == '':
@@ -194,7 +196,8 @@ class TransactionPageView(View):
                 compte_recepteur = Compte.objects.get(id=recepteur)
 
                 # verification du montant a retirer
-                if compte_emetteur.montant < montant:
+                montant_retrait = montant + frais_transaction
+                if compte_emetteur.montant < montant_retrait:
                     msg_error = True
                     return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
                 else:
@@ -203,7 +206,7 @@ class TransactionPageView(View):
                         msg_error = True
                         return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes})
                     # tranferer
-                    compte_emetteur.montant = compte_emetteur.montant - montant
+                    compte_emetteur.montant = compte_emetteur.montant - montant_retrait
                     compte_recepteur.montant = compte_recepteur.montant + montant
                     # save data
                     compte_emetteur.save()
@@ -214,15 +217,34 @@ class TransactionPageView(View):
                         compte_recepteur=compte_recepteur,
                         author=request.user,
                         montant=montant,
+                        frais_transaction = frais_transaction,
                     )
                     transfer.save()
+                    # depense des frais de transaction
+                    retrait = ''
+                    if frais_transaction > 0:
+                        depense = Depense(
+                        titre = 'Frais de transaction',
+                        description = f'De {compte_emetteur.name} à {compte_recepteur.name}, frais de transaction {frais_transaction} BIF',
+                        )
+                        depense.save()
+                        # creation du model Retrait
+                        retrait = Retrait(
+                            author = request.user,
+                            compte = compte_emetteur,
+                            depense = depense,
+                            montant = frais_transaction,
+                        )
+                        retrait.save()
                     # enregistrement de l'operation
                     operation = Operation(
                         compte_en_compte = transfer,
+                        retrait = retrait,
                         author = request.user,
                         type_operation = 'Compte en compte',
-                        description = f'De {compte_emetteur.name} à {compte_recepteur.name}',
+                        description = f'De {compte_emetteur.name} à {compte_recepteur.name}, frais de transaction {frais_transaction} BIF',
                         montant = montant,
+                        frais_transaction = frais_transaction,
                     )
                     operation.save()
                     # msg_succes = True

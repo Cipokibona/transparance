@@ -17,6 +17,7 @@ class CompteEnCompte(models.Model):
     compte_recepteur = models.ForeignKey(Compte, related_name='transferts_recus', on_delete=models.CASCADE)
     author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     montant = models.IntegerField(null=True, blank=True)
+    frais_transaction = models.IntegerField(null=True, blank=True)
     date = models.DateTimeField(default=timezone.now)
 
 class Depense(models.Model):
@@ -80,4 +81,5 @@ class Operation(models.Model):
     type_operation = models.fields.CharField(max_length=100)
     description = models.fields.CharField(max_length=100)
     montant = models.IntegerField(null=True, blank=True)
+    frais_transaction = models.IntegerField(null=True, blank=True)
     date = models.DateTimeField(default=timezone.now)

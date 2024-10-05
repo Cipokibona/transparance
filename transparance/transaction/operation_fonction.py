@@ -7,14 +7,20 @@ def annuler_operation(id):
 
     operation = Operation.objects.get(id=id)
     montant = operation.montant
+    frais_transaction = operation.frais_transaction
     compte = operation.compte
     # cas de compte en compte
     if operation.type_operation == 'Compte en compte':
         # annuler le transfer
         compte_emetteur = Compte.objects.get(id=operation.compte_en_compte.compte_emetteur.id)
         compte_recepteur = Compte.objects.get(id=operation.compte_en_compte.compte_recepteur.id)
-        compte_emetteur.montant = compte_emetteur.montant + montant
+        compte_emetteur.montant = compte_emetteur.montant + montant + frais_transaction
         compte_recepteur.montant = compte_recepteur.montant - montant
+        # annuler le retrait des frais de transaction
+        if frais_transaction > 0:
+            retrait = Retrait.objects.get(id=operation.retrait.id)
+            retrait.delete()
+
         # delete la table CompteEnCompte
         transfer = CompteEnCompte.objects.get(id=operation.compte_en_compte.id)
         transfer.delete()
