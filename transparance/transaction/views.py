@@ -282,13 +282,17 @@ class NewRetraitView(View):
         comptes = Compte.objects.filter(is_active=True)
         sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
         total = sum_comptes['total']
+        depense_fixes = Depense.objects.filter(fixe=True)
         
-        return render (request, self.template_name, {'comptes':comptes, 'total':total})
+        return render (request, self.template_name, {'comptes':comptes, 'total':total, 'depense_fixes':depense_fixes})
     
     def post(self, request):
         msg_error = False
         # operations = Operation.objects.all().order_by('-date')
         comptes = Compte.objects.filter(is_active=True)
+        sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+        total = sum_comptes['total']
+        depense_fixes = Depense.objects.filter(fixe=True)
         if request.method == 'POST':
             titre = request.POST.get("titre")
             description = request.POST.get("description")
@@ -297,7 +301,7 @@ class NewRetraitView(View):
             # si le montant n'est pas saisi initialiser a zero
             if montant == '' or compte_id == '' or titre == '':
                 msg_error = True
-                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes, 'total':total})
+                return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes, 'total':total,'depense_fixes':depense_fixes})
             else:
                 montant = int(montant)
                 compte_id = int(compte_id)
@@ -305,7 +309,7 @@ class NewRetraitView(View):
                 # annulation du retrait si le montant est supérieur du montant du compte
                 if montant > compte.montant:
                     msg_error = True
-                    return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes, 'total':total})
+                    return render(request, self.template_name, {'msg_error':msg_error,'comptes':comptes, 'total':total, 'depense_fixes':depense_fixes})
                 # creation du model Depense
                 depense = Depense(
                     titre = titre,
@@ -672,3 +676,80 @@ class AllOperations(View):
             operations = Operation.objects.filter(date__gte=date_debut,date__lte=date_fin)
 
         return render (request, self.template_name, {'operations':operations})
+    
+
+class AddDepenseFixe(View):
+
+    template_name = 'transaction/add_depense_fixe.html'
+
+    def get(self, request):
+        
+        return render (request, self.template_name)
+
+    def post(self, request):
+
+        if request.method == 'POST':
+            titre = request.POST.get("titre")
+            description = request.POST.get("description")
+            montant = request.POST.get("montant")
+            # si le montant n'est pas saisi initialiser a zero
+            if montant == '' or titre == '':
+                msg_error = True
+                return render(request, self.template_name, {'msg_error':msg_error})
+            else:
+                montant = int(montant)
+                # creation du model Depense
+                depense = Depense(
+                    titre = titre,
+                    description = description,
+                    montant = montant,
+                    fixe = True,
+                )
+                depense.save()
+
+                return redirect ('depense')
+
+        return render (request, self.template_name)
+    
+    
+class DepenseFixe(View):
+
+    template_name = 'transaction/depense_fixe.html'
+
+    def get(self, request, id):
+
+        depense_fixe = Depense.objects.get(id=id)
+        
+        return render (request, self.template_name, {'depense_fixe':depense_fixe})
+
+    def post(self, request, id):
+        depense_fixe = Depense.objects.get(id=id)
+
+        if request.method == 'POST':
+            titre = request.POST.get("titre")
+            description = request.POST.get("description")
+            montant = request.POST.get("montant")
+            # si le montant n'est pas saisi initialiser a zero
+            if montant == '' or titre == '':
+                msg_error = True
+                return render(request, self.template_name, {'msg_error':msg_error})
+            else:
+                montant = int(montant)
+                # creation du model Depense
+                depense_fixe.titre = titre
+                depense_fixe.description = description
+                depense_fixe.montant = montant
+                depense_fixe.save()
+
+                return redirect ('depense')
+
+        return render (request, self.template_name)
+    
+
+@login_required
+def delete_depense_fixe(request, id):
+
+    depense_fixe = Depense.objects.get(id=id)
+    depense_fixe.delete()
+
+    return redirect ('depense')
