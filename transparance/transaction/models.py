@@ -62,6 +62,7 @@ class DepenseTravail(models.Model):
     description = models.fields.CharField(max_length=100)
     compte = models.ForeignKey(Compte, null=True, on_delete=models.CASCADE)
     montant = models.IntegerField(null=True, blank=True)
+    is_group = models.BooleanField(default=False)
     date = models.DateTimeField(default=timezone.now)
 
 class DepenseDetailTravail(models.Model):

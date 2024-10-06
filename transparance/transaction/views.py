@@ -68,9 +68,23 @@ def annuler(request,id):
     return redirect('home')
 
 @login_required
-def travail (request):
+def travail (request,id):
 
-    return render (request,'transaction/travail.html')
+    travail = Travail.objects.get(id=id)
+    avances = MontantPayeTravail.objects.filter(travail=travail)
+    depenses = DepenseTravail.objects.filter(travail=travail)
+    total_avance = 0
+    total_depense = 0
+    list_id_depense_detail = []
+    for avance in avances:
+        total_avance = total_avance + avance.montant
+    for depense in depenses:
+        total_depense = total_depense + depense.montant
+        if depense.is_group == True:
+            list_id_depense_detail.append(depense.id)
+    depenses_detail = DepenseDetailTravail.objects.filter(depense_source__in=list_id_depense_detail)
+
+    return render (request,'transaction/info_travail.html', {'travail':travail, 'avances':avances, 'depenses':depenses,'total_avance':total_avance,'total_depense':total_depense,'depenses_detail':depenses_detail})
 
 
 @login_required
@@ -689,6 +703,7 @@ class DepenseTravailPageView(View):
                         author = request.user,
                         description = description,
                         compte = compte,
+                        is_group = True,
                     )
                 depense_travail.save()
                 # tant que le nombre de depense est superieur a 0

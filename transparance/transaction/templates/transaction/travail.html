@@ -127,7 +127,11 @@
                                     {% for travail in travaux %}
                                     <tr>
                                         <td title="Date du début">{{ travail.date_debut}}</td>
-                                        <td title="Titre">{{ forloop.counter }}. {{ travail.titre}}</td>
+                                        <td title="Titre">
+                                            <a href="/info_travail/{{travail.id}}/" style="color: #47d0c5; text-decoration: none;" title="Voir">
+                                                {{ forloop.counter }}. {{ travail.titre }}
+                                            </a>
+                                        </td>
                                         <td title="Propriétaire">{{ travail.proprio }}</td>
                                         <td title="Adresse">{{ travail.adresse }}</td>
                                         <td title="Montant Payé">
@@ -177,7 +181,11 @@
                                     <tr>
                                         <td title="Date début">{{ travail_fini.date_debut}}</td>
                                         <td title="Date fin">{{ travail_fini.date_fin }}</td>
-                                        <td title="Titre ">{{ forloop.counter }}. {{ travail_fini.titre}}</td>
+                                        <td title="Titre ">
+                                            <a href="/info_travail/{{travail_fini.id}}/" style="color: #47d0c5; text-decoration: none;" title="Voir">
+                                                {{ forloop.counter }}. {{ travail_fini.titre }}
+                                            </a>
+                                        </td>
                                         <td title="Propriétaire">{{ travail_fini.proprio }}</td>
                                         <td title="Adresse">{{ travail_fini.adresse }}</td>
                                         <td title="Gain ">

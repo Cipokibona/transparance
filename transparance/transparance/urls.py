@@ -39,4 +39,5 @@ urlpatterns = [
     path('depense_fixe/<int:id>/', trans.DepenseFixe.as_view(), name='depense_fixe'),
     path('delete_depense_fixe/<int:id>/', trans.delete_depense_fixe, name='delete_depense_fixe'),
     path('depense_saved/', trans.depense_fixe, name='depense_saved'),
+    path('info_travail/<int:id>/', trans.travail, name='info_travail'),
 ]
