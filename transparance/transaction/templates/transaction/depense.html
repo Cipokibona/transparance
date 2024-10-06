@@ -90,29 +90,30 @@
                                         {% if msg_error %}
                                         <label for="remember-me" class="text-info">
                                         <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
+                                        <input type="text" name="depense_fixe_statu" value="False" class="hidden">
                                         <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Effectuer">
                                     </div>
                                 </div>
                             </form>
-                            <form action="" method="post" class="hidden" id="depense_fixe">
+                            <form action="{% url 'depense_saved' %}" method="post" class="hidden" id="depense_fixe">
                                 {% csrf_token %}
-                                <button id="btn_depense_simple" class="btn btn-primary" style="background-color: #47d0c5;">Faire une simple dépense</button>
-                                <div class="shadow-sm p-3 mb-5 rounded">
-                                    <div class="mb-3">
+                                <button id="btn_depense_simple " class="btn btn-primary " style="background-color: #47d0c5; ">Faire une simple dépense</button>
+                                <div class="shadow-sm p-3 mb-5 rounded ">
+                                    <div class="mb-3 ">
                                         {% for depense_fixe in depense_fixes %}
                                         <label for="{{depense_fixe.id}}">
-                                            <input type="checkbox" name="{{depense_fixe.id}}" value="{{depense_fixe.id}}" checked>
+                                            <input type="checkbox" name="depenses_checked" value={{depense_fixe.id}} checked>
                                             {{depense_fixe.titre}} {{depense_fixe.montant}}
                                              BIF
-                                             <a href="/depense_fixe/{{depense_fixe.id}}" style="color: #47d0c5;">Modifier</a>
-                                             <a href="/delete_depense_fixe/{{depense_fixe.id}}" style="color: #ff0000;" class="supprimer_depense">Supprimer</a>
+                                             <a href="/depense_fixe/{{depense_fixe.id}}" style="color: #47d0c5; ">Modifier</a>
+                                             <a href="/delete_depense_fixe/{{depense_fixe.id}}" style="color: #ff0000; " class="supprimer_depense ">Supprimer</a>
                                         </label><br> {% endfor %}
-                                        <a href="{% url 'add_depense_fixe' %}" style="color: #47d0c5;">+ Add dépense fixe</a>
+                                        <a href="{% url 'add_depense_fixe' %}" style="color: #47d0c5; ">+ Add dépense fixe</a>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="compte" class="form-label">Compte</label>
+                                    <div class="mb-3 ">
+                                        <label for="compte" class="form-label ">Compte</label>
                                         <select class="form-control" name="compte">
-                                            <option value="" selected>Choisissez un compte source</option>
+                                            <option value=" " selected>Choisissez un compte source</option>
                                             {% for compte in comptes %}
                                             <option value="{{ compte.id }}">
                                                 {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant }} BIF)
@@ -120,15 +121,16 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="d-grid gap-2 mx-auto">
+                                    <div class="d-grid gap-2 mx-auto ">
                                         {% if msg_error %}
-                                        <label for="remember-me" class="text-info">
-                                        <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
-                                        <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Effectuer">
+                                        <label for="remember-me " class="text-info ">
+                                        <span class="alert alert-danger " role="alert ">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
+                                        <input type="text" name="depense_fixe_statu " value="True" class="hidden ">
+                                        <input type="submit" class="btn btn-primary " style="background-color: #47d0c5; " value="Effectuer">
                                     </div>
                                 </div>
                             </form>
-                            <a href="{% url 'home' %}" style="color: #47d0c5;">Retour</a>
+                            <a href="{% url 'home' %} " style="color: #47d0c5; ">Retour</a>
                         </div>
                     </div>
                 </div>

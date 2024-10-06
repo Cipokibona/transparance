@@ -72,6 +72,73 @@ def travail (request):
 
     return render (request,'transaction/travail.html')
 
+
+@login_required
+def depense_fixe(request):
+
+    if request.method == 'POST':
+        msg_error = False
+        # operations = Operation.objects.all().order_by('-date')
+        comptes = Compte.objects.filter(is_active=True)
+        sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
+        total = sum_comptes['total']
+        depense_fixes = Depense.objects.filter(fixe=True)
+        
+        depenses_checked = request.POST.getlist('depenses_checked')
+        list_id = []
+        compte_id = request.POST.get('compte')
+        # verification du choix du compte
+        if compte_id == '':
+            msg_error = True
+            return render(request, 'transaction/depense.html', {'msg_error':msg_error,'comptes':comptes, 'total':total,'depense_fixes':depense_fixes})
+        
+        compte_id = int(compte_id)
+        compte = Compte.objects.get(id=compte_id)
+        # list des id des dépenses choisi
+        for id in depenses_checked:
+            list_id.append(id)
+        # récupération des dépenses choisis
+        depenses = Depense.objects.filter(id__in=list_id)
+
+        # recuperation du montant total et des titres
+        montant_total = 0
+        list_depense = []
+        for depense in depenses:
+            montant_total = montant_total + depense.montant
+            list_depense.append(depense.titre)
+
+        # creation de la tables depense
+        depense_group = Depense(
+            titre = 'Dépenses groupées',
+            description = f'Liste des dépenses {list_depense}',
+            montant = montant_total,
+        )
+        depense_group.save()
+        # creation de retrait
+        retrait = Retrait(
+            author = request.user,
+            compte = compte,
+            depense = depense_group,
+            montant = montant_total,
+        )
+        retrait.save()
+        # mis a jour du compte
+        compte.montant = compte.montant - montant_total
+        compte.save()
+        # creation du model Operation
+        operation = Operation(
+            compte = compte,
+            author = request.user,
+            type_operation = 'Retrait',
+            description = f'Dépenses fixes choisies: {list_depense}',
+            montant = montant_total,
+            retrait = retrait,
+        )
+        operation.save()
+        
+
+    return redirect('home')
+
 class ProfilPageView(View):
     template_name = 'transaction/profil.html'
 
@@ -320,6 +387,7 @@ class NewRetraitView(View):
             description = request.POST.get("description")
             montant = request.POST.get("montant")
             compte_id = request.POST.get("compte")
+            is_depense_fixe = request.POST.get("depense_fixe_statu")
             # si le montant n'est pas saisi initialiser a zero
             if montant == '' or compte_id == '' or titre == '':
                 msg_error = True

@@ -38,4 +38,5 @@ urlpatterns = [
     path('add_depense_fixe/', trans.AddDepenseFixe.as_view(), name='add_depense_fixe'),
     path('depense_fixe/<int:id>/', trans.DepenseFixe.as_view(), name='depense_fixe'),
     path('delete_depense_fixe/<int:id>/', trans.delete_depense_fixe, name='delete_depense_fixe'),
+    path('depense_saved/', trans.depense_fixe, name='depense_saved'),
 ]
