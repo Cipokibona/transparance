@@ -105,7 +105,12 @@ def depense_fixe(request):
         list_depense = []
         for depense in depenses:
             montant_total = montant_total + depense.montant
-            list_depense.append(depense.titre)
+            list_depense.append(f'{depense.titre}:{depense.montant} BIF')
+
+        # verification du montant total et le montant du compte
+        if montant_total > compte.montant:
+            msg_error = True
+            return render(request, 'transaction/depense.html', {'msg_error':msg_error,'comptes':comptes, 'total':total,'depense_fixes':depense_fixes})
 
         # creation de la tables depense
         depense_group = Depense(
