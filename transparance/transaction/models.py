@@ -27,14 +27,6 @@ class Depense(models.Model):
     montant = models.IntegerField(null=True, blank=True)
     fixe = models.BooleanField(default=False)
 
-class Retrait(models.Model):
-
-    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    compte = models.ForeignKey(Compte, null=True, on_delete=models.CASCADE)
-    depense = models.ForeignKey(Depense, null=True, on_delete=models.CASCADE)
-    montant = models.IntegerField(null=True, blank=True)
-    date = models.DateTimeField(default=timezone.now)
-
 
 class Travail(models.Model):
 
@@ -70,6 +62,16 @@ class DepenseDetailTravail(models.Model):
     depense_source = models.ForeignKey(DepenseTravail, null=True, on_delete=models.CASCADE)
     depense = models.fields.CharField(max_length=100)
     montant = models.IntegerField(null=True, blank=True)
+
+class Retrait(models.Model):
+
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    compte = models.ForeignKey(Compte, null=True, on_delete=models.CASCADE)
+    depense = models.ForeignKey(Depense, null=True, on_delete=models.CASCADE)
+    depense_travail = models.ForeignKey(DepenseTravail, null=True, on_delete=models.CASCADE)
+    montant = models.IntegerField(null=True, blank=True)
+    date = models.DateTimeField(default=timezone.now)
+
 
 class Operation(models.Model):
 

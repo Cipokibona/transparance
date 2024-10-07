@@ -3,8 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from authentification.models import User
 from transaction.models import Compte, CompteEnCompte, Depense, Retrait, Travail, MontantPayeTravail, DepenseTravail, Operation, DepenseDetailTravail
-from django.db.models import Sum
+from django.db.models import Sum, F
+from django.db.models.functions import TruncMonth
 from django.utils import timezone
+from datetime import datetime
 from transaction.operation_fonction import annuler_operation
 
 
@@ -15,8 +17,27 @@ def home (request):
     sum_comptes = Compte.objects.filter(is_active=True).aggregate(total=Sum('montant'))
     total = sum_comptes['total']
     operations = Operation.objects.all().order_by('-date')[:10]
+    # regrouper les depenses et les revenus par mois de l'année actuelle
+    annee_actuelle = datetime.now().year
+    depense_mensuelles = (Retrait.objects.filter(date__year=annee_actuelle).annotate(mois=TruncMonth('date')).values('mois').annotate(total_depenses=Sum('montant')))
+    revenus_mensuels = (MontantPayeTravail.objects.filter(date__year=annee_actuelle).annotate(mois=TruncMonth('date')).values('mois').annotate(total_revenus=Sum('montant')))
+    depenses_dict = {d['mois']:d['total_depenses'] for d in depense_mensuelles}
+    revenus_dict = {r['mois']:r['total_revenus'] for r in revenus_mensuels}
 
-    return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations})
+    mois_communs = set(depenses_dict.keys()).union(set(revenus_dict.keys()))
+    resultats = [
+        {
+            'mois': mois,
+            'total_depenses': depenses_dict.get(mois, 0),
+            'total_revenus' : revenus_dict.get(mois,0),
+            'profit' : revenus_dict.get(mois,0) - depenses_dict.get(mois,0),
+            'perc_depense' : ((depenses_dict.get(mois,0)/revenus_dict.get(mois,0))*100 if revenus_dict.get(mois,0)>0 else 0),
+            'perc_profit' : (((revenus_dict.get(mois,0) - depenses_dict.get(mois,0))/revenus_dict.get(mois,0))*100 if revenus_dict.get(mois,0)>0 else 0),
+        }
+        for mois in sorted(mois_communs)
+    ]
+
+    return render (request,'transaction/home.html', {'comptes':comptes,'total':total,'operations':operations, 'resultats':resultats})
 
 @login_required
 def operation(request, id):
@@ -672,6 +693,14 @@ class DepenseTravailPageView(View):
                     # mis a jour du montant sur le compte selectionner
                     compte.montant = compte.montant - montant
                     compte.save()
+                    # creation du model Retrait
+                    retrait = Retrait(
+                        author = request.user,
+                        compte = compte,
+                        depense_travail = depense_travail,
+                        montant = montant,
+                    )
+                    retrait.save()
                     # enregistrement de l'operation
                     operation = Operation(
                         compte = compte,
@@ -733,6 +762,14 @@ class DepenseTravailPageView(View):
                 compte.save()
                 # enregistrement de la depense
                 depense_travail.save()
+                # creation du model Retrait
+                retrait = Retrait(
+                    author = request.user,
+                    compte = compte,
+                    depense_travail = depense_travail,
+                    montant = montant_total,
+                )
+                retrait.save()
                 # enregistrement de l'operation
                 operation = Operation(
                     compte = compte,

@@ -45,7 +45,7 @@
             </div>
         </nav>
         <div class="row">
-            <h3 class="text-center pt-5">Comptes</h3>
+            <h2 class="text-center pt-5">Comptes</h2>
             <div class="col">
                 {% if msg_succes %}
                 <label for="remember-me" class="text-info">
@@ -67,9 +67,13 @@
                         </tr>
                         {% endfor %}
                         <tr>
-                            <th scope="row" colspan="2">Total</th>
+                            <th scope="row" colspan="2">
+                                <h3>
+                                    Total
+                                </h3>
+                            </th>
                             <td title="Total">
-                                <strong>{{ total }} BIF</strong>
+                                <h3>{{ total }} BIF</h3>
                             </td>
                         </tr>
                     </tbody>
@@ -108,6 +112,34 @@
                                     annuler
                                 </a>
                             </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{% url 'all_operations' %}" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+                Tout voir
+            </a>
+        </div>
+        <div class="row">
+            <h3 class="text-center pt-5">Transparance financière annuelle</h3>
+            <div class="col table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Mois</th>
+                            <th scope="col">Revenus</th>
+                            <th scope="col">Dépenses</th>
+                            <th scope="col">Profit Net</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resultat in resultats %}
+                        <tr>
+                            <td title="Mois">{{ resultat.mois|date:"F Y" }}</td>
+                            <td title="Revenus">{{ resultat.total_revenus|default:0 }} BIF</td>
+                            <td title="Dépenses">{{ resultat.total_depenses|default:0 }} BIF ({{ resultat.perc_depense|floatformat:2 }} %)</td>
+                            <td title="Profit net">{{ resultat.profit|default:0 }} BIF ({{ resultat.perc_profit|floatformat:2 }} %)</td>
                         </tr>
                         {% endfor %}
                     </tbody>
