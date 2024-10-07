@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <title>All operations</title>
+    <title>All evaluation</title>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
+                            <a class="nav-link" aria-current="page" href="{% url 'transaction' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'transaction' %}">Transactions</a>
@@ -45,59 +45,39 @@
             </div>
         </nav>
         <div class="row">
-            <h3 class="text-center pt-5">Toutes les Opérations effectuées</h3>
-            <a href="{% url 'home' %}" style="color: #47d0c5; text-decoration: none;" title="Home">
-                Retour
-            </a>
+            <h3 class="text-center pt-5">Transparance financière annuelle</h3>
             <div class="col table-responsive">
-                {% if not is_get %}
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <div class="shadow-sm p-3 mb-5 rounded">
-                        <div class="mb-3">
-                            <label for="debut">De</label>
-                            <input type="date" name="debut">
-                            <label for="fin">à</label>
-                            <input type="date" name="fin">
-                            <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Chercher">
-                        </div>
-                    </div>
-                </form>
-                {% endif %}
                 <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Type d'opération</th>
-                            <th scope="col">Déscription</th>
-                            <th scope="col">Auteur</th>
-                            <th scope="col">Montant</th>
+                            <th scope="col">Mois</th>
+                            <th scope="col">Revenus</th>
+                            <th scope="col">Dépenses</th>
+                            <th scope="col">Profit Net</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for operation in operations %}
+                        {% for resultat in resultats %}
                         <tr>
                             <th scope="row">{{ forloop.counter }}</th>
-                            <td title="Date de l'opération">{{ operation.date }}</td>
-                            <td title="Type d'opération">{{ operation.type_operation }}</td>
-                            <td title="Déscription">
-                                <a href="/operation/{{operation.id}}/" style="color: #47d0c5; text-decoration: none;" title="voir l'opération">
-                                {{ operation.description }}
-                            </a>
+                            <td title="Mois">
+                                <a href="/evaluation_month/{{resultat.mois|date:'m'}}/{{resultat.mois|date:'Y'}}/" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+                                    {{ resultat.mois|date:"F Y" }}
+                                </a>
                             </td>
-                            <td title="Auteur">{{ operation.author.last_name }}</td>
-                            <td title="Montant" class="fs-5">
-                                {{ operation.montant }} BIF
-                            </td>
+                            <td title="Revenus">{{ resultat.total_revenus|default:0 }} BIF</td>
+                            <td title="Dépenses">{{ resultat.total_depenses|default:0 }} BIF ({{ resultat.perc_depense|floatformat:2 }} %)</td>
+                            <td title="Profit net" class="fs-4">{{ resultat.profit|default:0 }} BIF ({{ resultat.perc_profit|floatformat:2 }} %)</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+
+                <a href="{% url 'home' %}" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+                    Retour
+                </a>
             </div>
-            <a href="{% url 'home' %}" style="color: #47d0c5; text-decoration: none;" title="Home">
-                Retour
-            </a>
         </div>
     </div>
 </body>

@@ -89,6 +89,29 @@ def annuler(request,id):
     return redirect('home')
 
 @login_required
+def all_evaluation(request):
+    depense_mensuelles = (Retrait.objects.annotate(mois=TruncMonth('date')).values('mois').annotate(total_depenses=Sum('montant')))
+    revenus_mensuels = (MontantPayeTravail.objects.annotate(mois=TruncMonth('date')).values('mois').annotate(total_revenus=Sum('montant')))
+    depenses_dict = {d['mois']:d['total_depenses'] for d in depense_mensuelles}
+    revenus_dict = {r['mois']:r['total_revenus'] for r in revenus_mensuels}
+
+    mois_communs = set(depenses_dict.keys()).union(set(revenus_dict.keys()))
+    mois_communs = set(depenses_dict.keys()).union(set(revenus_dict.keys()))
+    resultats = [
+        {
+            'mois': mois,
+            'total_depenses': depenses_dict.get(mois, 0),
+            'total_revenus' : revenus_dict.get(mois,0),
+            'profit' : revenus_dict.get(mois,0) - depenses_dict.get(mois,0),
+            'perc_depense' : ((depenses_dict.get(mois,0)/revenus_dict.get(mois,0))*100 if revenus_dict.get(mois,0)>0 else 0),
+            'perc_profit' : (((revenus_dict.get(mois,0) - depenses_dict.get(mois,0))/revenus_dict.get(mois,0))*100 if revenus_dict.get(mois,0)>0 else 0),
+        }
+        for mois in sorted(mois_communs)
+    ]
+
+    return render (request,'transaction/all_evaluations.html', {'resultats':resultats})
+
+@login_required
 def travail (request,id):
 
     travail = Travail.objects.get(id=id)
@@ -178,6 +201,17 @@ def depense_fixe(request):
         
 
     return redirect('home')
+
+@login_required
+def evaluation_month(request,month,year):
+
+    month = int(month)
+    year = int (year)
+    operations = Operation.objects.filter(date__month=month,date__year=year)
+    is_get = True
+
+    return render (request,'transaction/all_operations.html', {'operations':operations, 'is_get':is_get})
+
 
 class ProfilPageView(View):
     template_name = 'transaction/profil.html'

@@ -40,4 +40,6 @@ urlpatterns = [
     path('delete_depense_fixe/<int:id>/', trans.delete_depense_fixe, name='delete_depense_fixe'),
     path('depense_saved/', trans.depense_fixe, name='depense_saved'),
     path('info_travail/<int:id>/', trans.travail, name='info_travail'),
+    path('evaluation_month/<int:month>/<int:year>/', trans.evaluation_month, name='evaluation_month'),
+    path('all_evaluation/', trans.all_evaluation, name='all_evaluation'),
 ]

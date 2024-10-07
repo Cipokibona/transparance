@@ -67,13 +67,11 @@
                         </tr>
                         {% endfor %}
                         <tr>
-                            <th scope="row" colspan="2">
-                                <h3>
-                                    Total
-                                </h3>
+                            <th scope="row" colspan="2" class="fs-3">
+                                Total
                             </th>
                             <td title="Total">
-                                <h3>{{ total }} BIF</h3>
+                                <strong class="fs-3">{{ total }} BIF</strong>
                             </td>
                         </tr>
                     </tbody>
@@ -107,7 +105,7 @@
                             </td>
                             <td title="Auteur">{{ operation.author.last_name }}</td>
                             <td title="Montant">
-                                {{ operation.montant }} BIF
+                                <span class="fs-5">{{ operation.montant }} BIF</span>
                                 <a href="/delete_operation/{{operation.id}}/" style="color: #ff0000; text-decoration: none;" title="Annuler l'opération">
                                     annuler
                                 </a>
@@ -117,7 +115,7 @@
                     </tbody>
                 </table>
             </div>
-            <a href="{% url 'all_operations' %}" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+            <a href="{% url 'all_operations' %}" style="color: #47d0c5; text-decoration: none;" title="Voir toutes les opérations">
                 Tout voir
             </a>
         </div>
@@ -136,16 +134,20 @@
                     <tbody>
                         {% for resultat in resultats %}
                         <tr>
-                            <td title="Mois">{{ resultat.mois|date:"F Y" }}</td>
+                            <td title="Mois">
+                                <a href="/evaluation_month/{{resultat.mois|date:'m'}}/{{resultat.mois|date:'Y'}}/" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+                                    {{ resultat.mois|date:"F Y" }}
+                                </a>
+                            </td>
                             <td title="Revenus">{{ resultat.total_revenus|default:0 }} BIF</td>
                             <td title="Dépenses">{{ resultat.total_depenses|default:0 }} BIF ({{ resultat.perc_depense|floatformat:2 }} %)</td>
-                            <td title="Profit net">{{ resultat.profit|default:0 }} BIF ({{ resultat.perc_profit|floatformat:2 }} %)</td>
+                            <td title="Profit net" class="fs-4">{{ resultat.profit|default:0 }} BIF ({{ resultat.perc_profit|floatformat:2 }} %)</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <a href="{% url 'all_operations' %}" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+            <a href="{% url 'all_evaluation' %}" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
                 Tout voir
             </a>
         </div>
