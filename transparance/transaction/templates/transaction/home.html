@@ -16,7 +16,7 @@
     <div class="container text-center">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <img src="{% static 'images/logo3.png' %}" alt="logo">
+                <img src="{% static 'images/logo3.svg' %}" class="container-fluid" alt="logo">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -25,88 +25,88 @@
                         <li class="nav-item">
                             <a class="nav-link disabled" aria-current="page" href="#">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'transaction' %}">Transactions</a>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{% url 'transaction' %} ">Transactions</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'depense' %}">Dépenses</a>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{% url 'depense' %} ">Dépenses</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'travail' %}">Travaux</a>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{% url 'travail' %} ">Travaux</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'profil' %}">Profil</a>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{% url 'profil' %} ">Profil</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-disabled="true" href="{% url 'login' %}">Logout</a>
+                        <li class="nav-item ">
+                            <a class="nav-link " aria-disabled="true " href="{% url 'login' %} ">Logout</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <div class="row">
-            <h2 class="text-center pt-5">Comptes</h2>
-            <div class="col">
+        <div class="row ">
+            <h2 class="text-center pt-5 ">Comptes</h2>
+            <div class="col ">
                 {% if msg_succes %}
-                <label for="remember-me" class="text-info">
-                                    <span class="alert alert-success" role="alert">Opération réussie.</span></label><br> {% endif %}
-                <table class="table">
+                <label for="remember-me " class="text-info ">
+                                    <span class="alert alert-success " role="alert ">Opération réussie.</span></label><br> {% endif %}
+                <table class="table ">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Compte</th>
-                            <th scope="col">Montant</th>
+                            <th scope="col ">#</th>
+                            <th scope="col ">Compte</th>
+                            <th scope="col ">Montant</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for compte in comptes %}
                         <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td title="{{ compte.description }}">{{ compte.name}}</td>
-                            <td title="Montant de {{ compte.name }}">{{ compte.montant}} BIF</td>
+                            <th scope="row ">{{ forloop.counter }}</th>
+                            <td title="{{ compte.description }} ">{{ compte.name}}</td>
+                            <td title="Montant de {{ compte.name }} ">{{ compte.montant}} BIF</td>
                         </tr>
                         {% endfor %}
                         <tr>
-                            <th scope="row" colspan="2" class="fs-3">
+                            <th scope="row " colspan="2 " class="fs-3 ">
                                 Total
                             </th>
-                            <td title="Total">
-                                <strong class="fs-3">{{ total }} BIF</strong>
+                            <td title="Total ">
+                                <strong class="fs-3 ">{{ total }} BIF</strong>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="row">
-            <h3 class="text-center pt-5">Opérations effectuées</h3>
-            <div class="col table-responsive">
-                <table class="table">
+        <div class="row ">
+            <h3 class="text-center pt-5 ">Opérations effectuées</h3>
+            <div class="col table-responsive ">
+                <table class="table ">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Type d'opération</th>
-                            <th scope="col">Déscription</th>
-                            <th scope="col">Auteur</th>
-                            <th scope="col">Montant</th>
+                            <th scope="col ">#</th>
+                            <th scope="col ">Date</th>
+                            <th scope="col ">Type d'opération</th>
+                            <th scope="col ">Déscription</th>
+                            <th scope="col ">Auteur</th>
+                            <th scope="col ">Montant</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for operation in operations %}
                         <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td title="Date de l'opération">{{ operation.date }}</td>
-                            <td title="Type d'opération">{{ operation.type_operation }}</td>
-                            <td title="Déscription">
-                                <a href="/operation/{{operation.id}}/" style="color: #47d0c5; text-decoration: none;" title="voir l'opération">
+                            <th scope="row ">{{ forloop.counter }}</th>
+                            <td title="Date de l 'opération">{{ operation.date }}</td>
+                            <td title="Type d'opération ">{{ operation.type_operation }}</td>
+                            <td title="Déscription ">
+                                <a href="/operation/{{operation.id}}/ " style="color: #016bff; text-decoration: none; " title="voir l 'opération">
                                 {{ operation.description }}
                             </a>
                             </td>
                             <td title="Auteur">{{ operation.author.last_name }}</td>
                             <td title="Montant">
                                 <span class="fs-5">{{ operation.montant }} BIF</span>
-                                <a href="/delete_operation/{{operation.id}}/" style="color: #ff0000; text-decoration: none;" title="Annuler l'opération">
+                                <a href="/delete_operation/{{operation.id}}/" style="color: #ff0000; text-decoration: none;" title="Annuler l'opération ">
                                     annuler
                                 </a>
                             </td>
@@ -115,27 +115,27 @@
                     </tbody>
                 </table>
             </div>
-            <a href="{% url 'all_operations' %}" style="color: #47d0c5; text-decoration: none;" title="Voir toutes les opérations">
+            <a href="{% url 'all_operations' %} " style="color: #016bff; text-decoration: none; " title="Voir toutes les opérations ">
                 Tout voir
             </a>
         </div>
-        <div class="row">
-            <h3 class="text-center pt-5">Transparance financière annuelle</h3>
-            <div class="col table-responsive">
-                <table class="table">
+        <div class="row ">
+            <h3 class="text-center pt-5 ">Transparance financière annuelle</h3>
+            <div class="col table-responsive ">
+                <table class="table ">
                     <thead>
                         <tr>
-                            <th scope="col">Mois</th>
-                            <th scope="col">Revenus</th>
-                            <th scope="col">Dépenses</th>
-                            <th scope="col">Profit Net</th>
+                            <th scope="col ">Mois</th>
+                            <th scope="col ">Revenus</th>
+                            <th scope="col ">Dépenses</th>
+                            <th scope="col ">Profit Net</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for resultat in resultats %}
                         <tr>
-                            <td title="Mois">
-                                <a href="/evaluation_month/{{resultat.mois|date:'m'}}/{{resultat.mois|date:'Y'}}/" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+                            <td title="Mois ">
+                                <a href="/evaluation_month/{{resultat.mois|date:'m'}}/{{resultat.mois|date:'Y'}}/" style="color: #016bff; text-decoration: none; " title="Annuler l 'opération">
                                     {{ resultat.mois|date:"F Y" }}
                                 </a>
                             </td>
@@ -147,7 +147,7 @@
                     </tbody>
                 </table>
             </div>
-            <a href="{% url 'all_evaluation' %}" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+            <a href="{% url 'all_evaluation' %}" style="color: #016bff; text-decoration: none;" title="Annuler l'opération ">
                 Tout voir
             </a>
         </div>
