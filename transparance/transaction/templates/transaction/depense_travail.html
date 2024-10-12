@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +25,7 @@
     <div class="container text-center">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <img src="{% static 'images/logo3.png' %}" alt="logo">
+                <img src="{% static 'images/logo3.svg' %}" class="container-fluid" alt="logo">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </nav>
-        <a href="{% url 'travail' %}" style="color: #47d0c5;">Retour</a>
+        <a href="{% url 'travail' %}" style="color: #016bff;">Retour</a>
         <div id="login">
             <h3 class="text-center pt-5">Dépense sur {{ travail.titre }}</h3>
             <div class="container">
@@ -66,7 +66,7 @@
                             <form action="" method="post" id="depense_unique" class="visible">
                                 {% csrf_token %}
                                 <div class="shadow-sm p-3 mb-5 rounded">
-                                    <button id="multiple_depense" class="btn btn-primary" style="background-color: #47d0c5;">Dépenses détaillées</button>
+                                    <button id="multiple_depense" class="btn btn-primary" style="background-color: #016bff;">Dépenses détaillées</button>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Déscription</label>
                                         <input type="text" class="form-control" name="description" placeholder="Déscription sur la dépense">
@@ -77,7 +77,7 @@
                                             <option value="" selected>Choisissez un compte source</option>
                                             {% for compte in comptes %}
                                             <option value="{{ compte.id }}">
-                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant }} BIF)
+                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant|intcomma }} BIF)
                                             </option>
                                             {% endfor %}
                                         </select>
@@ -93,14 +93,14 @@
                                         {% if msg_error %}
                                         <label for="remember-me" class="text-info">
                                         <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
-                                        <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Save">
+                                        <input type="submit" class="btn btn-primary" style="background-color: #016bff;" value="Save">
                                     </div>
                                 </div>
                             </form>
                             <form action="" method="post" id="depense_multiple" class="hidden">
                                 {% csrf_token %}
                                 <div class="shadow-sm p-3 mb-5 rounded">
-                                    <button id="unique_depense" class="btn btn-primary" style="background-color: #47d0c5;">Dépense simple</button>
+                                    <button id="unique_depense" class="btn btn-primary" style="background-color: #016bff;">Dépense simple</button>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Déscription</label>
                                         <input type="text" class="form-control" name="description" placeholder="Déscription sur la dépense">
@@ -111,7 +111,7 @@
                                             <option value="" selected>Choisissez un compte source</option>
                                             {% for compte in comptes %}
                                             <option value="{{ compte.id }}">
-                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant }} BIF)
+                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant|intcomma }} BIF)
                                             </option>
                                             {% endfor %}
                                         </select>
@@ -132,13 +132,13 @@
                                     </div>
                                     <div class="mb-3" id="other_depense">
                                         <input type="number" id='nombre_total_depense' name="nombre_total_depense" value=2 class="hidden">
-                                        <button id="add_depense" class="btn btn-primary" style="background-color: #47d0c5;">+</button>
+                                        <button id="add_depense" class="btn btn-primary" style="background-color: #016bff;">+</button>
                                     </div>
                                     <div class="d-grid gap-2 mx-auto">
                                         {% if msg_error %}
                                         <label for="remember-me" class="text-info">
                                         <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
-                                        <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Save">
+                                        <input type="submit" class="btn btn-primary" style="background-color: #016bff;" value="Save">
                                     </div>
                                 </div>
                             </form>

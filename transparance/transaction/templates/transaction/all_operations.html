@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@
     <div class="container text-center">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <img src="{% static 'images/logo3.png' %}" alt="logo">
+                <img src="{% static 'images/logo3.svg' %}" class="container-fluid" alt="logo">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -46,7 +46,7 @@
         </nav>
         <div class="row">
             <h3 class="text-center pt-5">Toutes les Opérations effectuées</h3>
-            <a href="{% url 'home' %}" style="color: #47d0c5; text-decoration: none;" title="Home">
+            <a href="{% url 'home' %}" style="color: #016bff; text-decoration: none;" title="Home">
                 Retour
             </a>
             <div class="col table-responsive">
@@ -59,7 +59,7 @@
                             <input type="date" name="debut">
                             <label for="fin">à</label>
                             <input type="date" name="fin">
-                            <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Chercher">
+                            <input type="submit" class="btn btn-primary" style="background-color: #016bff;" value="Chercher">
                         </div>
                     </div>
                 </form>
@@ -82,20 +82,20 @@
                             <td title="Date de l'opération">{{ operation.date }}</td>
                             <td title="Type d'opération">{{ operation.type_operation }}</td>
                             <td title="Déscription">
-                                <a href="/operation/{{operation.id}}/" style="color: #47d0c5; text-decoration: none;" title="voir l'opération">
+                                <a href="/operation/{{operation.id}}/" style="color: #016bff; text-decoration: none;" title="voir l'opération">
                                 {{ operation.description }}
                             </a>
                             </td>
                             <td title="Auteur">{{ operation.author.last_name }}</td>
                             <td title="Montant" class="fs-5">
-                                {{ operation.montant }} BIF
+                                {{ operation.montant|intcomma }} BIF
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <a href="{% url 'home' %}" style="color: #47d0c5; text-decoration: none;" title="Home">
+            <a href="{% url 'home' %}" style="color: #016bff; text-decoration: none;" title="Home">
                 Retour
             </a>
         </div>

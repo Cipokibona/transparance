@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@
     <div class="container text-center">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <img src="{% static 'images/logo3.png' %}" alt="logo">
+                <img src="{% static 'images/logo3.svg' %}" class="container-fluid" alt="logo">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -53,31 +53,31 @@
                         {% if is_compte_en_compte == True %}
                         <tr>
                             <th scope="row">Type d'opération</th>
-                            <td title="Date de l'opération">{{ operation.type_operation }}</td>
+                            <td title="Type d'opération">{{ operation.type_operation }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Déscription</th>
-                            <td title="Date de l'opération">{{ operation.description }}</td>
+                            <td title="Déscription">{{ operation.description }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Compte emetteur</th>
-                            <td title="Date de l'opération">{{ operation.compte_en_compte.compte_emetteur.name }}</td>
+                            <td title="Compte emetteur">{{ operation.compte_en_compte.compte_emetteur.name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Compte récepteur</th>
-                            <td title="Date de l'opération">{{ operation.compte_en_compte.compte_recepteur.name }}</td>
+                            <td title="Compte récepteur">{{ operation.compte_en_compte.compte_recepteur.name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Montant</th>
-                            <td title="Date de l'opération" class="fs-5">{{ operation.montant }} BIF</td>
+                            <td title="Montan" class="fs-5">{{ operation.montant|intcomma }} BIF</td>
                         </tr>
                         <tr>
                             <th scope="row">Frais de transaction</th>
-                            <td title="Date de l'opération" class="fs-5">{{ operation.frais_transaction }} BIF</td>
+                            <td title="Frais de transaction" class="fs-5">{{ operation.frais_transaction }} BIF</td>
                         </tr>
                         <tr>
                             <th scope="row">Auteur</th>
-                            <td title="Date de l'opération">{{ operation.author.last_name }}</td>
+                            <td title="Auteur">{{ operation.author.last_name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Date de l'opération</th>
@@ -89,23 +89,23 @@
                         {% if is_retrait == True %}
                         <tr>
                             <th scope="row">Type d'opération</th>
-                            <td title="Date de l'opération">{{ operation.type_operation }}</td>
+                            <td title="Type d'opération">{{ operation.type_operation }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Déscription</th>
-                            <td title="Date de l'opération">{{ operation.description }}</td>
+                            <td title="Déscription">{{ operation.description }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Compte du retrait</th>
-                            <td title="Date de l'opération">{{ operation.compte.name }}</td>
+                            <td title="Compte du retrait">{{ operation.compte.name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Montant</th>
-                            <td title="Date de l'opération" class="fs-5">{{ operation.montant }} BIF</td>
+                            <td title="Montant" class="fs-5">{{ operation.montant|intcomma }} BIF</td>
                         </tr>
                         <tr>
                             <th scope="row">Auteur</th>
-                            <td title="Date de l'opération">{{ operation.author.last_name }}</td>
+                            <td title="Auteur">{{ operation.author.last_name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Date de l'opération</th>
@@ -117,27 +117,27 @@
                         {% if is_depot == True %}
                         <tr>
                             <th scope="row">Type d'opération</th>
-                            <td title="Date de l'opération">{{ operation.type_operation }}</td>
+                            <td title="Type d'opération">{{ operation.type_operation }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Travail</th>
-                            <td title="Date de l'opération">{{ operation.avance.travail.titre }}</td>
+                            <td title="Travail">{{ operation.avance.travail.titre }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Déscription</th>
-                            <td title="Date de l'opération">{{ operation.description }}</td>
+                            <td title="Déscription">{{ operation.description }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Compte dépot</th>
-                            <td title="Date de l'opération">{{ operation.compte.name }}</td>
+                            <td title="Compte dépot">{{ operation.compte.name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Montant</th>
-                            <td title="Date de l'opération" class="fs-5">{{ operation.montant }} BIF</td>
+                            <td title="Montant" class="fs-5">{{ operation.montant|intcomma }} BIF</td>
                         </tr>
                         <tr>
                             <th scope="row">Auteur</th>
-                            <td title="Date de l'opération">{{ operation.author.last_name }}</td>
+                            <td title="Auteur">{{ operation.author.last_name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Date de l'opération</th>
@@ -149,27 +149,27 @@
                         {% if is_depense_travail == True %}
                         <tr>
                             <th scope="row">Type d'opération</th>
-                            <td title="Date de l'opération">{{ operation.type_operation }}</td>
+                            <td title="Type d'opération">{{ operation.type_operation }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Travail</th>
-                            <td title="Date de l'opération">{{ operation.depense_travail.travail.titre }}</td>
+                            <td title="Travail">{{ operation.depense_travail.travail.titre }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Déscription</th>
-                            <td title="Date de l'opération">{{ operation.description }}</td>
+                            <td title="Déscription">{{ operation.description }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Compte Rétrait</th>
-                            <td title="Date de l'opération">{{ operation.compte.name }}</td>
+                            <td title="Compte Rétrait">{{ operation.compte.name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Montant</th>
-                            <td title="Date de l'opération" class="fs-5">{{ operation.montant }} BIF</td>
+                            <td title="Montant" class="fs-5">{{ operation.montant|intcomma }} BIF</td>
                         </tr>
                         <tr>
                             <th scope="row">Auteur</th>
-                            <td title="Date de l'opération">{{ operation.author.last_name }}</td>
+                            <td title="Auteur">{{ operation.author.last_name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Date de l'opération</th>
@@ -181,37 +181,37 @@
                         {% if is_depense_detail == True %}
                         <tr>
                             <th scope="row">Type d'opération</th>
-                            <td title="Date de l'opération">{{ operation.type_operation }}</td>
+                            <td title="Type d'opération">{{ operation.type_operation }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Travail</th>
-                            <td title="Date de l'opération">{{ operation.depense_travail.travail.titre }}</td>
+                            <td title="Travail">{{ operation.depense_travail.travail.titre }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Déscription</th>
-                            <td title="Date de l'opération">{{ operation.description }}</td>
+                            <td title="Déscription">{{ operation.description }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Compte Rétrait</th>
-                            <td title="Date de l'opération">{{ operation.compte.name }}</td>
+                            <td title="Compte Rétrait">{{ operation.compte.name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Listes des dépenses</th>
-                            <td title="Date de l'opération">
+                            <td title="Listes des dépenses">
                                 {% for depense in depenses %}
                                 <p>
-                                    {{ depense.depense }} : {{ depense.montant }} BIF <br>
+                                    {{ depense.depense }} : {{ depense.montant|intcomma }} BIF <br>
                                 </p>
                                 {% endfor %}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">Montant total</th>
-                            <td title="Date de l'opération" class="fs-5">{{ operation.montant }} BIF</td>
+                            <td title="Montant total" class="fs-5">{{ operation.montant|intcomma }} BIF</td>
                         </tr>
                         <tr>
                             <th scope="row">Auteur</th>
-                            <td title="Date de l'opération">{{ operation.author.last_name }}</td>
+                            <td title="Auteur">{{ operation.author.last_name }}</td>
                         </tr>
                         <tr>
                             <th scope="row">Date de l'opération</th>
@@ -221,7 +221,7 @@
                         <!-- fin de la condition depnse -->
                     </tbody>
                 </table>
-                <a href="{% url 'home' %}" style="color: #47d0c5;">Retour</a>
+                <a href="{% url 'home' %}" style="color: #016bff;">Retour</a>
             </div>
         </div>
     </div>

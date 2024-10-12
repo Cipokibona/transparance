@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@
     <div class="container text-center">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <img src="{% static 'images/logo3.png' %}" alt="logo">
+                <img src="{% static 'images/logo3.svg' %}" class="container-fluid" alt="logo">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -45,7 +45,7 @@
             </div>
         </nav>
         <div id="login">
-            <a href="{% url 'new_compte' %}" style="color: #47d0c5;">+ New Compte</a>
+            <a href="{% url 'new_compte' %}" style="color: #016bff;">+ New Compte</a>
             <h3 class="text-center pt-5">Transfert Compte en Compte</h3>
             <div class="container">
                 <div id="login-row" class="row justify-content-center align-items-center">
@@ -60,7 +60,7 @@
                                             <option value="" selected>Choisissez un compte source</option>
                                             {% for compte in comptes %}
                                             <option value="{{ compte.id }}">
-                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant }} BIF)
+                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant|intcomma }} BIF)
                                             </option>
                                             {% endfor %}
                                         </select>
@@ -71,7 +71,7 @@
                                             <option value="" selected>Choisissez un compte cible</option>
                                             {% for compte in comptes %}
                                             <option value="{{ compte.id }}">
-                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant }} BIF)
+                                                {{ forloop.counter }}. {{ compte.name }} ({{ compte.montant|intcomma }} BIF)
                                             </option>
                                             {% endfor %}
                                         </select>
@@ -88,11 +88,11 @@
                                         {% if msg_error %}
                                         <label for="remember-me" class="text-info">
                                         <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
-                                        <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Transferer">
+                                        <input type="submit" class="btn btn-primary" style="background-color: #016bff;" value="Transferer">
                                     </div>
                                 </div>
                             </form>
-                            <a href="{% url 'home' %}" style="color: #47d0c5;">Retour</a>
+                            <a href="{% url 'home' %}" style="color: #016bff;">Retour</a>
                         </div>
                     </div>
                 </div>

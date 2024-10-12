@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@
     <div class="container text-center">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <img src="{% static 'images/logo3.png' %}" alt="logo">
+                <img src="{% static 'images/logo3.svg' %}" class="container-fluid" alt="logo">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -45,7 +45,7 @@
             </div>
         </nav>
         <div class="row">
-            <h3 class="text-center pt-5">Transparance financière annuelle</h3>
+            <h3 class="text-center pt-5">Evaluations</h3>
             <div class="col table-responsive">
                 <table class="table">
                     <thead>
@@ -62,19 +62,19 @@
                         <tr>
                             <th scope="row">{{ forloop.counter }}</th>
                             <td title="Mois">
-                                <a href="/evaluation_month/{{resultat.mois|date:'m'}}/{{resultat.mois|date:'Y'}}/" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+                                <a href="/evaluation_month/{{resultat.mois|date:'m'}}/{{resultat.mois|date:'Y'}}/" style="color: #016bff; text-decoration: none;" title="Annuler l'opération">
                                     {{ resultat.mois|date:"F Y" }}
                                 </a>
                             </td>
-                            <td title="Revenus">{{ resultat.total_revenus|default:0 }} BIF</td>
-                            <td title="Dépenses">{{ resultat.total_depenses|default:0 }} BIF ({{ resultat.perc_depense|floatformat:2 }} %)</td>
-                            <td title="Profit net" class="fs-4">{{ resultat.profit|default:0 }} BIF ({{ resultat.perc_profit|floatformat:2 }} %)</td>
+                            <td title="Revenus">{{ resultat.total_revenus|default:0|intcomma }} BIF</td>
+                            <td title="Dépenses">{{ resultat.total_depenses|default:0|intcomma }} BIF ({{ resultat.perc_depense|floatformat:2 }} %)</td>
+                            <td title="Profit net" class="fs-4">{{ resultat.profit|default:0|intcomma }} BIF ({{ resultat.perc_profit|floatformat:2 }} %)</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
 
-                <a href="{% url 'home' %}" style="color: #47d0c5; text-decoration: none;" title="Annuler l'opération">
+                <a href="{% url 'home' %}" style="color: #016bff; text-decoration: none;" title="Annuler l'opération">
                     Retour
                 </a>
             </div>

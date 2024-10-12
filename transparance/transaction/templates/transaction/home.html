@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +63,7 @@
                         <tr>
                             <th scope="row ">{{ forloop.counter }}</th>
                             <td title="{{ compte.description }} ">{{ compte.name}}</td>
-                            <td title="Montant de {{ compte.name }} ">{{ compte.montant}} BIF</td>
+                            <td title="Montant {{ compte.name }} ">{{ compte.montant|intcomma }} BIF</td>
                         </tr>
                         {% endfor %}
                         <tr>
@@ -71,7 +71,7 @@
                                 Total
                             </th>
                             <td title="Total ">
-                                <strong class="fs-3 ">{{ total }} BIF</strong>
+                                <strong class="fs-3 ">{{ total|intcomma }} BIF</strong>
                             </td>
                         </tr>
                     </tbody>
@@ -105,8 +105,8 @@
                             </td>
                             <td title="Auteur">{{ operation.author.last_name }}</td>
                             <td title="Montant">
-                                <span class="fs-5">{{ operation.montant }} BIF</span>
-                                <a href="/delete_operation/{{operation.id}}/" style="color: #ff0000; text-decoration: none;" title="Annuler l'opération ">
+                                <span class="fs-5">{{ operation.montant|intcomma }} BIF</span>
+                                <a href="/delete_operation/{{operation.id}}/" style="color: #ff0000; text-decoration: none;" title="Annuler l'opération " class="supprimer_operation">
                                     annuler
                                 </a>
                             </td>
@@ -120,7 +120,7 @@
             </a>
         </div>
         <div class="row ">
-            <h3 class="text-center pt-5 ">Transparance financière annuelle</h3>
+            <h3 class="text-center pt-5 ">Evaluations annuelles</h3>
             <div class="col table-responsive ">
                 <table class="table ">
                     <thead>
@@ -135,23 +135,38 @@
                         {% for resultat in resultats %}
                         <tr>
                             <td title="Mois ">
-                                <a href="/evaluation_month/{{resultat.mois|date:'m'}}/{{resultat.mois|date:'Y'}}/" style="color: #016bff; text-decoration: none; " title="Annuler l 'opération">
-                                    {{ resultat.mois|date:"F Y" }}
+                                <a href="/evaluation_month/{{resultat.mois|date:'m'}}/{{resultat.mois|date:'Y'}}/" style="color: #016bff; text-decoration: none; " title="Voir les opérations de {{ resultat.mois|date:'F Y'}}">
+                                    {{ resultat.mois|date:"F Y " }}
                                 </a>
                             </td>
-                            <td title="Revenus">{{ resultat.total_revenus|default:0 }} BIF</td>
-                            <td title="Dépenses">{{ resultat.total_depenses|default:0 }} BIF ({{ resultat.perc_depense|floatformat:2 }} %)</td>
-                            <td title="Profit net" class="fs-4">{{ resultat.profit|default:0 }} BIF ({{ resultat.perc_profit|floatformat:2 }} %)</td>
+                            <td title="Revenus {{ resultat.mois|date:'F Y'}}">{{ resultat.total_revenus|default:0|intcomma }} BIF</td>
+                            <td title="Dépenses {{ resultat.mois|date:'F Y'}}">{{ resultat.total_depenses|default:0|intcomma }} BIF ({{ resultat.perc_depense|floatformat:2 }} %)</td>
+                            <td title="Profit net {{ resultat.mois|date:'F Y'}}" class="fs-4 ">{{ resultat.profit|default:0|intcomma }} BIF ({{ resultat.perc_profit|floatformat:2 }} %)</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <a href="{% url 'all_evaluation' %}" style="color: #016bff; text-decoration: none;" title="Annuler l'opération ">
+            <a href="{% url 'all_evaluation' %} " style="color: #016bff; text-decoration: none; " title="Voir toutes les évaluations">
                 Tout voir
             </a>
         </div>
     </div>
+    <script>
+        function showAlert(event) {
+            event.preventDefault();
+            const confirmation = confirm('Etes-vous sûr de vouloir le supprimer ?');
+            if (confirmation) {
+                window.location.href = event.currentTarget.href;
+            }
+        }
+        window.onload = function() {
+            const links = document.querySelectorAll('.supprimer_operation');
+            links.forEach(link => {
+                link.addEventListener('click', showAlert);
+            })
+        }
+    </script>
 </body>
 
 </html>

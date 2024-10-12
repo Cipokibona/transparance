@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +29,7 @@
     <div class="container text-center">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <img src="{% static 'images/logo3.png' %}" alt="logo">
+                <img src="{% static 'images/logo3.svg' %}" class="container-fluid" alt="logo">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -76,9 +76,9 @@
                         </tr>
                         <tr>
                             <th scope="row">Valeur</th>
-                            <td title="Valeur">
+                            <td title="Valeur" class="fs-4">
                                 <strong>
-                                    {{ travail.valeur }} BIF
+                                    {{ travail.valeur|intcomma }} BIF
                                 </strong>
                             </td>
                         </tr>
@@ -105,7 +105,8 @@
                                 <p>
                                     <strong>Déscription : </strong>{{ avance.description }}
                                     <br>
-                                    <strong>Montant : </strong>{{ avance.montant }} BIF
+                                    <strong>Montant : </strong>
+                                    <span class="fs-5">{{ avance.montant|intcomma }} BIF</span>
                                     <br>
                                     <strong>Auteur : </strong>{{ avance.author }}
                                     <br>
@@ -113,7 +114,7 @@
                                 </p>
                                 {% endfor%}
                                 <p>
-                                    <strong>Total : {{ total_avance }} BIF</strong>
+                                    <strong class="fs-4">Total : {{ total_avance|intcomma }} BIF</strong>
                                 </p>
                             </td>
                         </tr>
@@ -124,30 +125,32 @@
                                 <p>
                                     <strong>Déscription : </strong>{{ depense.description }}
                                     <br>
-                                    <strong>Montant : </strong>{{ depense.montant }} BIF
+                                    <strong>Montant : </strong>
+                                    <span class="fs-5">{{ depense.montant|intcomma }} BIF</span>
                                     <!-- au cas ou c'est une dépense détailée -->
                                     {% if depense.is_group %}
-                                    <a href="#" style="color: #47d0c5;" id="depense_multiple">Détails</a><br>
+                                    <a href="#" style="color: #016bff;" id="depense_multiple">Détails</a>
                                     <span id="affichage_details" class="hidden text-center">
                                         {% for depense_detail in depenses_detail %}
                                         <strong>Dépense : </strong>{{ depense_detail.depense }}
-                                        <strong>Montant : </strong>{{ depense_detail.montant }} BIF
-                                        <br> {% endfor %}
-                                        <a href="#" style="color: #47d0c5;" id="cacher_depense_multiple">Cacher les détails</a><br>
-                                    </span> {% endif %}
+                                        <strong>Montant : </strong>
+                                        <span class="fs-5">{{ depense_detail.montant|intcomma }} BIF</span>
+                                    <br> {% endfor %}
+                                    <a href="#" style="color: #016bff;" id="cacher_depense_multiple">Cacher les détails</a><br>
+                                    </span> {% endif %}<br>
                                     <strong>Auteur : </strong>{{ depense.author }}
                                     <br>
                                     <strong>Date : </strong>{{ depense.date }}
                                 </p>
                                 {% endfor%}
                                 <p>
-                                    <strong>Total : {{ total_depense }} BIF</strong>
+                                    <strong class="fs-4">Total : {{ total_depense|intcomma }} BIF</strong>
                                 </p>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <a href="{% url 'travail' %}" style="color: #47d0c5;">Retour</a>
+                <a href="{% url 'travail' %}" style="color: #016bff;">Retour</a>
             </div>
         </div>
     </div>
