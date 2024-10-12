@@ -61,7 +61,7 @@
                         <div id="login-box" class="col-md-12">
                             <form action="" method="post" class="visible" id="depense_simple">
                                 {% csrf_token %}
-                                <button id="btn_depense_fixe" class="btn btn-primary" style="background-color: #016bff;"> Voir les dépenses fixes</button>
+                                <button id="btn_depense_fixe" class="btn btn-primary" style="background-color: #012778;"> Voir les dépenses fixes</button>
                                 <div class="shadow-sm p-3 mb-5 rounded">
                                     <div class="mb-3">
                                         <label for="titre" class="form-label">Titre descriptif de la dépense</label>
@@ -91,13 +91,13 @@
                                         <label for="remember-me" class="text-info">
                                         <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
                                         <input type="text" name="depense_fixe_statu" value="False" class="hidden">
-                                        <input type="submit" class="btn btn-primary" style="background-color: #016bff;" value="Effectuer">
+                                        <input type="submit" class="btn btn-primary" style="background-color: #012778;" value="Effectuer">
                                     </div>
                                 </div>
                             </form>
                             <form action="{% url 'depense_saved' %}" method="post" class="hidden" id="depense_fixe">
                                 {% csrf_token %}
-                                <button id="btn_depense_simple" class="btn btn-primary " style="background-color: #016bff; ">Simple dépense</button>
+                                <button id="btn_depense_simple" class="btn btn-primary " style="background-color: #012778; ">Simple dépense</button>
                                 <div class="shadow-sm p-3 mb-5 rounded ">
                                     <div class="mb-3 ">
                                         {% for depense_fixe in depense_fixes %}
@@ -126,7 +126,7 @@
                                         <label for="remember-me " class="text-info ">
                                         <span class="alert alert-danger " role="alert ">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
                                         <input type="text" name="depense_fixe_statu " value="True" class="hidden ">
-                                        <input type="submit" class="btn btn-primary " style="background-color: #016bff; " value="Effectuer">
+                                        <input type="submit" class="btn btn-primary " style="background-color: #012778; " value="Effectuer">
                                     </div>
                                 </div>
                             </form>

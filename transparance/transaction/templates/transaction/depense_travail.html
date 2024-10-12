@@ -66,7 +66,7 @@
                             <form action="" method="post" id="depense_unique" class="visible">
                                 {% csrf_token %}
                                 <div class="shadow-sm p-3 mb-5 rounded">
-                                    <button id="multiple_depense" class="btn btn-primary" style="background-color: #016bff;">Dépenses détaillées</button>
+                                    <button id="multiple_depense" class="btn btn-primary" style="background-color: #012778;">Dépenses détaillées</button>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Déscription</label>
                                         <input type="text" class="form-control" name="description" placeholder="Déscription sur la dépense">
@@ -93,14 +93,14 @@
                                         {% if msg_error %}
                                         <label for="remember-me" class="text-info">
                                         <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
-                                        <input type="submit" class="btn btn-primary" style="background-color: #016bff;" value="Save">
+                                        <input type="submit" class="btn btn-primary" style="background-color: #012778;" value="Save">
                                     </div>
                                 </div>
                             </form>
                             <form action="" method="post" id="depense_multiple" class="hidden">
                                 {% csrf_token %}
                                 <div class="shadow-sm p-3 mb-5 rounded">
-                                    <button id="unique_depense" class="btn btn-primary" style="background-color: #016bff;">Dépense simple</button>
+                                    <button id="unique_depense" class="btn btn-primary" style="background-color: #012778;">Dépense simple</button>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Déscription</label>
                                         <input type="text" class="form-control" name="description" placeholder="Déscription sur la dépense">
@@ -132,13 +132,13 @@
                                     </div>
                                     <div class="mb-3" id="other_depense">
                                         <input type="number" id='nombre_total_depense' name="nombre_total_depense" value=2 class="hidden">
-                                        <button id="add_depense" class="btn btn-primary" style="background-color: #016bff;">+</button>
+                                        <button id="add_depense" class="btn btn-primary" style="background-color: #012778;">+</button>
                                     </div>
                                     <div class="d-grid gap-2 mx-auto">
                                         {% if msg_error %}
                                         <label for="remember-me" class="text-info">
                                         <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
-                                        <input type="submit" class="btn btn-primary" style="background-color: #016bff;" value="Save">
+                                        <input type="submit" class="btn btn-primary" style="background-color: #012778;" value="Save">
                                     </div>
                                 </div>
                             </form>

@@ -25,6 +25,7 @@
                         <form action="" method="post">
                             {% csrf_token %}
                             <div class="shadow-sm p-3 mb-5 rounded">
+                                <img src="{% static 'images/logo3.svg' %}" class="container-fluid" alt="logo">
                                 <div class="mb-3">
                                     <label for="username" class="form-label">Username</label>
                                     <input type="text" class="form-control" name="username" placeholder="name@example">
@@ -37,7 +38,7 @@
                                     {% if msg_error %}
                                     <label for="remember-me" class="text-info">
                                     <span class="alert alert-danger" role="alert">Identifiants invalides. Veuillez réessayer.</span></label><br> {% endif %}
-                                    <input type="submit" class="btn btn-primary" style="background-color: #47d0c5;" value="Login">
+                                    <input type="submit" class="btn btn-primary" style="background-color: #012778;" value="Login">
                                 </div>
                             </div>
                         </form>
