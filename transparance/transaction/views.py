@@ -232,23 +232,29 @@ class ProfilPageView(View):
             first_name = request.POST.get("first_name")
             last_name = request.POST.get("last_name")
             email = request.POST.get("email")
-            # tel = request.POST.get("tel")
+            tel = request.POST.get("tel")
             post = request.POST.get("post")
-            # username = request.POST.get("username")
-            # password = request.POST.get("password")
-            # valid_password = request.POST.get("valid_password")
-                
-                # enregistrement des nouveaux données du profil
-
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+            new_password = request.POST.get("newpassword")
             user = User.objects.get(id=request.user.id)
+                #verification du tel
+            if tel == '':
+                tel = None
+            else:
+                tel = int(tel)
+            # verification du new password
+            if new_password and user.check_password(password):
+                user.set_password(new_password)
+            # enregistrement des nouveaux données du profil
+
             user.first_name = first_name
             user.last_name = last_name
             user.email = email
-            # user.tel = tel
+            user.tel = tel
             user.post = post
             user.is_staff = True
-            # user.username = username
-            # user.password = password
+            user.username = username
             user.save()
             
         return render(request, self.template_name, context={'user':user, 'msg_error':msg_error})
@@ -267,13 +273,17 @@ class NewUserPageView(View):
             first_name = request.POST.get("first_name")
             last_name = request.POST.get("last_name")
             email = request.POST.get("email")
-            # tel = request.POST.get("tel")
+            tel = request.POST.get("tel")
             post = request.POST.get("post")
             username = request.POST.get("username")
             password = request.POST.get("password")
             # valid_password = request.POST.get("valid_password")
                 
                 # enregistrement du nouvel utilisateur
+            if tel == '':
+                tel = None
+            else:
+                tel = int(tel)
 
             if username and password:
                 # enregistrement de user
@@ -281,6 +291,7 @@ class NewUserPageView(View):
                         first_name=first_name,
                         last_name=last_name,
                         email = email,
+                        tel = tel,
                         post = post,
                         username=username,
                         password=password,
@@ -298,7 +309,7 @@ class NewUserPageView(View):
             else:
                 msg_error = True
             
-        return render(request, self.template_name, context={'user':user, 'msg_error':msg_error})
+        return render(request, self.template_name, context={'msg_error':msg_error})
     
 
 class TransactionPageView(View):
