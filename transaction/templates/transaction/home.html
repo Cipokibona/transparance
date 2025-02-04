@@ -1,0 +1,172 @@
+{% load static %}{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>Home</title>
+</head>
+
+<body>
+
+    <div class="container text-center">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <img src="{% static 'images/logo3.svg' %}" class="container-fluid" alt="logo">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link disabled" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{% url 'transaction' %} ">Transactions</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{% url 'depense' %} ">Dépenses</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{% url 'travail' %} ">Travaux</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{% url 'profil' %} ">Profil</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link " aria-disabled="true " href="{% url 'login' %} ">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="row ">
+            <h2 class="text-center pt-5 ">Comptes</h2>
+            <div class="col ">
+                {% if msg_succes %}
+                <label for="remember-me " class="text-info ">
+                                    <span class="alert alert-success " role="alert ">Opération réussie.</span></label><br> {% endif %}
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th scope="col ">#</th>
+                            <th scope="col ">Compte</th>
+                            <th scope="col ">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for compte in comptes %}
+                        <tr>
+                            <th scope="row ">{{ forloop.counter }}</th>
+                            <td title="{{ compte.description }} ">{{ compte.name}}</td>
+                            <td title="Montant {{ compte.name }} ">{{ compte.montant|intcomma }} BIF</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <th scope="row " colspan="2 " class="fs-3 ">
+                                Total
+                            </th>
+                            <td title="Total ">
+                                <strong class="fs-3 ">{{ total|intcomma }} BIF</strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row ">
+            <h3 class="text-center pt-5 ">Opérations effectuées</h3>
+            <div class="col table-responsive ">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th scope="col ">#</th>
+                            <th scope="col ">Date</th>
+                            <th scope="col ">Type d'opération</th>
+                            <th scope="col ">Déscription</th>
+                            <th scope="col ">Auteur</th>
+                            <th scope="col ">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for operation in operations %}
+                        <tr>
+                            <th scope="row ">{{ forloop.counter }}</th>
+                            <td title="Date de l 'opération">{{ operation.date }}</td>
+                            <td title="Type d'opération ">{{ operation.type_operation }}</td>
+                            <td title="Déscription ">
+                                <a href="/operation/{{operation.id}}/ " style="color: #016bff; text-decoration: none; " title="voir l 'opération">
+                                {{ operation.description }}
+                            </a>
+                            </td>
+                            <td title="Auteur">{{ operation.author.last_name }}</td>
+                            <td title="Montant">
+                                <span class="fs-5">{{ operation.montant|intcomma }} BIF</span>
+                                <a href="/delete_operation/{{operation.id}}/" style="color: #ff0000; text-decoration: none;" title="Annuler l'opération " class="supprimer_operation">
+                                    annuler
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{% url 'all_operations' %} " style="color: #016bff; text-decoration: none; " title="Voir toutes les opérations ">
+                Tout voir
+            </a>
+        </div>
+        <div class="row ">
+            <h3 class="text-center pt-5 ">Evaluations annuelles</h3>
+            <div class="col table-responsive ">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th scope="col ">Mois</th>
+                            <th scope="col ">Revenus</th>
+                            <th scope="col ">Dépenses</th>
+                            <th scope="col ">Profit Net</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resultat in resultats %}
+                        <tr>
+                            <td title="Mois ">
+                                <a href="/evaluation_month/{{resultat.mois|date:'m'}}/{{resultat.mois|date:'Y'}}/" style="color: #016bff; text-decoration: none; " title="Voir les opérations de {{ resultat.mois|date:'F Y'}}">
+                                    {{ resultat.mois|date:"F Y " }}
+                                </a>
+                            </td>
+                            <td title="Revenus {{ resultat.mois|date:'F Y'}}">{{ resultat.total_revenus|default:0|intcomma }} BIF</td>
+                            <td title="Dépenses {{ resultat.mois|date:'F Y'}}">{{ resultat.total_depenses|default:0|intcomma }} BIF ({{ resultat.perc_depense|floatformat:2 }} %)</td>
+                            <td title="Profit net {{ resultat.mois|date:'F Y'}}" class="fs-4 ">{{ resultat.profit|default:0|intcomma }} BIF ({{ resultat.perc_profit|floatformat:2 }} %)</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{% url 'all_evaluation' %} " style="color: #016bff; text-decoration: none; " title="Voir toutes les évaluations">
+                Tout voir
+            </a>
+        </div>
+    </div>
+    <script>
+        function showAlert(event) {
+            event.preventDefault();
+            const confirmation = confirm('Etes-vous sûr de vouloir le supprimer ?');
+            if (confirmation) {
+                window.location.href = event.currentTarget.href;
+            }
+        }
+        window.onload = function() {
+            const links = document.querySelectorAll('.supprimer_operation');
+            links.forEach(link => {
+                link.addEventListener('click', showAlert);
+            })
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+# Fichiers compilés
+__pycache__/
+*.py[cod]
+
+# Environnements virtuels
+venv/
+.env
+*.venv
