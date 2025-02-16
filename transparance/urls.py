@@ -19,6 +19,9 @@ from django.urls import path
 from authentification import views as auth
 from transaction import views as trans
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', auth.LoginPageView.as_view(), name='login'),
@@ -43,3 +46,5 @@ urlpatterns = [
     path('evaluation_month/<int:month>/<int:year>/', trans.evaluation_month, name='evaluation_month'),
     path('all_evaluation/', trans.all_evaluation, name='all_evaluation'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
